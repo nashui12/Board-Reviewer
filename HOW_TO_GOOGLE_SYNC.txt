@@ -12,6 +12,6 @@ Menu names in Google Cloud change now and then, so follow the idea if a label lo
    Under Authorized JavaScript origins add your site's origin only, with no path:
    https://YOUR-USERNAME.github.io
 5. Copy the Client ID (it ends in .apps.googleusercontent.com).
-6. Paste it into site/config.js between the quotes, commit, and wait for the site to redeploy.
+6. Paste it into config.js between the quotes, commit, and wait for the site to redeploy.
 
 The ID is not a secret. Anyone can also paste their own ID in the app: Documents tab, Google sync.

@@ -1,7 +1,7 @@
 /* Board Reviewer service worker: opens offline after the first visit. Bump VERSION to force a refresh. */
 const VERSION = 'v1';
 const CACHE = 'br-' + VERSION;
-const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'config.js', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png'];
+const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'config.js', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png'];
 const CDN = ['cdnjs.cloudflare.com', 'fonts.googleapis.com', 'fonts.gstatic.com', 'cdn.jsdelivr.net'];
 
 self.addEventListener('install', e => {
