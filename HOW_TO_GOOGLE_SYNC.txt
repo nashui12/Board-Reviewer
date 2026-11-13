@@ -1,0 +1,17 @@
+Turn on Google sync (owner steps, once)
+
+The progress file is kept in a hidden app folder of each person's own Google Drive. You never see anyone's data.
+Menu names in Google Cloud change now and then, so follow the idea if a label looks different.
+
+1. Go to console.cloud.google.com and create a project (any name).
+2. APIs & Services, Library: search "Google Drive API" and press Enable.
+3. APIs & Services, OAuth consent screen (Google Auth Platform): choose External, fill in the app name and your email, and add the scope
+   .../auth/drive.appdata
+   Then publish the app to "In production". This scope only reaches the app's own hidden folder, so it should not need Google's review.
+4. Credentials, Create credentials, OAuth client ID, type "Web application".
+   Under Authorized JavaScript origins add your site's origin only, with no path:
+   https://YOUR-USERNAME.github.io
+5. Copy the Client ID (it ends in .apps.googleusercontent.com).
+6. Paste it into site/config.js between the quotes, commit, and wait for the site to redeploy.
+
+The ID is not a secret. Anyone can also paste their own ID in the app: Documents tab, Google sync.
