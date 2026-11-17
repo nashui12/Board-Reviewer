@@ -15,7 +15,8 @@
 <script src="config.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet"></noscript>
 <style>
 :root{
   --bg:#edf1f5; --grid:#e3e9f0; --ink:#16202e; --mute:#566377; --card:#ffffff; --line:#cdd7e3;
@@ -885,7 +886,7 @@ function canSync(){
   if(w==='unknown') return S.manualWifi;
   return false;
 }
-const PARSER_V=3;   // bump when text files should be read again
+const PARSER_V=4;   // bump when text files should be read again
 const isLocalFile = d=>/\.(txt|md|csv|text|opml)$/i.test(d.name);
 
 /* ================= cards ================= */
@@ -1499,63 +1500,150 @@ const cardKey=c=>c.fm?'fm|'+c.id:[c.front,...(c.choices||[]).map(x=>x.t),c.back,
    A copy from another source is no longer thrown away: the card remembers which sources also had it (c.rep).
    Reworded copies are found by comparing words (the numbers must be the same). Two copies inside one file do not count. */
 const REP_STOP=new Set('the and for are was were that this with from which what when where who how why does did not you your has have had its into than then them they their there these those will would can could should may might must been being also any all one two per each both either about over under between among such use used using given find solve value calculate determine following'.split(' '));
-const REP={stamp:'',map:new Map()};
+const REP={stamp:'',map:new Map(),ex:[],mg:[]};
 const repSrc=c=>({k:c.bank?String(c.docId||'bank'):'f:'+normName(c.docName||c.docId||''),n:c.docName||'a file'});
-function repAdd(c,x){ if(!x||!x.k||x.k===repSrc(c).k) return false; if(!Array.isArray(c.rep)) c.rep=[]; if(c.rep.some(y=>y[0]===x.k)) return false; c.rep.push([x.k,String(x.n||'').slice(0,80)]); return true; }
-function repFrom(c,o,withOwn){ let ch=false; if(withOwn&&repAdd(c,repSrc(o))) ch=true; for(const y of (o.rep||[])) if(repAdd(c,{k:y[0],n:y[1]})) ch=true; return ch; }
-const repWords=t=>new Set(keyText(t).split(' ').filter(w=>w.length>2&&!REP_STOP.has(w)&&!/^\d+$/.test(w)));
-const repNums=c=>(String([c.front,...(c.choices||[]).map(x=>x.t)].join(' ')).replace(/(\d),(?=\d{3})/g,'$1').match(/\d+(?:\.\d+)?/g)||[]).sort().join(',');
+function repAdd(c,x){ if(!x||!x.k||x.k===repSrc(c).k) return false; if(!Array.isArray(c.rep)) c.rep=[]; if(c.rep.some(y=>y[0]===x.k)) return false; c.rep.push(x.w?[x.k,String(x.n||'').slice(0,80),1]:[x.k,String(x.n||'').slice(0,80)]); return true; }
+function repFrom(c,o,withOwn){ let ch=false; if(withOwn&&repAdd(c,Object.assign({w:repKey(c)!==repKey(o)},repSrc(o)))) ch=true; for(const y of (o.rep||[])) if(repAdd(c,{k:y[0],n:y[1],w:y[2]})) ch=true; return ch; }
+/* What counts as the same question: the wording, the choices (in any order) and the answer, once the writing is made alike (x² = x^2 = x^{2}, √ = sqrt, − = -).
+   A reworded copy has the same numbers, the same right answer and nearly the same words. */
+const repNorm=t=>String(t==null?'':t).replace(/[−‒–—]/g,'-').replace(/×/g,'*').replace(/÷/g,'/').replace(/²/g,'^2').replace(/³/g,'^3').replace(/√/g,'sqrt ').replace(/π/g,' pi ').replace(/θ/g,' theta ').replace(/½/g,'1/2').replace(/¼/g,'1/4').replace(/¾/g,'3/4').replace(/≤/g,'<=').replace(/≥/g,'>=').replace(/\^\{([^{}]*)\}/g,'^$1').replace(/_\{([^{}]*)\}/g,'$1').replace(/([A-Za-z])_(\w)/g,'$1$2').replace(/(\d),(?=\d{3})/g,'$1');
+const rkT=t=>keyText(repNorm(t));
+const repKey=c=>[rkT(c.front),(c.choices||[]).map(x=>rkT(x.t)).sort().join('~'),rkT(c.back),rkT(c.answerText)].join('|');
+const repWords=t=>new Set(rkT(t).split(' ').filter(w=>w.length>2&&!REP_STOP.has(w)&&!/^\d+$/.test(w)));
+const repNumsOf=t=>(repNorm(t).match(/\d+(?:\.\d+)?/g)||[]).sort().join(',');
+const repNums=c=>repNumsOf([c.front,...(c.choices||[]).map(x=>x.t)].join(' '));
 const repJ=(a,b)=>{ if(!a.size||!b.size) return 0; const [sm,lg]=a.size<b.size?[a,b]:[b,a]; let i=0; for(const x of sm) if(lg.has(x)) i++; return i/(a.size+b.size-i); };
+const REPF=new WeakMap();   // the work of reading a card's wording is kept, so a long list is not read again and again
+function repFacts(c,s){
+  const sig=[c.type,c.front,(c.choices||[]).map(x=>x.k+x.t).join('\u0002'),c.answer,c.back,c.answerText,c.docName,c.bank?1:0].join('\u0001');
+  let e=REPF.get(c);
+  if(!e||e.sig!==sig){ const ch=c.choices||[], a=ch.find(x=>x.k===c.answer), bt=`${c.back||''} ${c.answerText||''}`;
+    e={sig,c,s:repSrc(c),rk:repKey(c),w:repWords(c.front),cw:repWords(ch.map(x=>x.t).join(' ')),nm:repNums(c),ans:a?rkT(a.t):'',bn:repNumsOf(bt),bw:repWords(bt),mcq:c.type==='mcq'}; REPF.set(c,e); }
+  return s&&s.k!==e.s.k?Object.assign({},e,{s}):e;
+}
+/* how alike two cards are: 2 = the same question, 1 = a reworded copy (same numbers, same right answer, checked), 0 = looks alike but there is no answer to check, -1 = different */
+function repPair(f,g){
+  const both=!!(f.ans&&g.ans);
+  if(f.rk===g.rk) return both&&f.ans!==g.ans?-1:2;
+  if(f.nm!==g.nm||(both&&f.ans!==g.ans)) return -1;
+  let known=both;
+  if(!f.mcq&&!g.mcq){ const fa=f.bn||f.bw.size, ga=g.bn||g.bw.size; if(fa&&ga){ if(f.bn!==g.bn||(f.bw.size&&g.bw.size&&repJ(f.bw,g.bw)<0.5)) return -1; known=true; } else known=false; }
+  const sj=repJ(f.w,g.w), sc=f.cw.size&&g.cw.size?0.65*sj+0.35*repJ(f.cw,g.cw):sj;
+  if(sc<0.8) return -1;
+  return known&&f.mcq===g.mcq?1:0;
+}
 function repCompute(){
-  const F=cards.filter(c=>!c.fm&&!c.gone&&String(c.front||'').trim()).map(c=>({c,s:repSrc(c),w:repWords(c.front),cw:repWords((c.choices||[]).map(x=>x.t).join(' ')),nm:repNums(c),k:cardKey(c),ans:(a=>a?keyText(a.t):'')((c.choices||[]).find(x=>x.k===c.answer))}));
-  const n=F.length, nb=F.map(()=>new Map());   // neighbour -> true when it is the very same question, false when reworded
-  const byK=new Map(); F.forEach((f,i)=>{ if(!byK.has(f.k)) byK.set(f.k,[]); byK.get(f.k).push(i); });
-  for(const g of byK.values()) if(g.length>1) for(const a of g) for(const b of g) if(a!==b) nb[a].set(b,true);
-  const idx=new Map(); F.forEach((f,i)=>{ if(f.w.size>=4) for(const t of f.w){ let a=idx.get(t); if(!a){ a=[]; idx.set(t,a); } a.push(i); } });
+  const F=cards.filter(c=>!c.fm&&!c.gone&&String(c.front||'').trim()).map(c=>repFacts(c));
+  const n=F.length, nb=F.map(()=>new Map());   // neighbour -> how alike (see repPair)
+  const byK=new Map(); F.forEach((f,i)=>{ if(!byK.has(f.rk)) byK.set(f.rk,[]); byK.get(f.rk).push(i); });
+  for(const g of byK.values()) if(g.length>1) for(const a of g) for(const b of g) if(a<b){ const l=repPair(F[a],F[b]); if(l>=0){ nb[a].set(b,l); nb[b].set(a,l); } }
+  const idx=new Map(); F.forEach((f,i)=>{ if(f.w.size>=2) for(const t of f.w){ let a=idx.get(t); if(!a){ a=[]; idx.set(t,a); } a.push(i); } });
   const cap=Math.max(60,Math.round(n*0.02));
   F.forEach((f,i)=>{
-    if(f.w.size<4) return;
+    if(f.w.size<2) return;
     const hit=new Map(); for(const t of f.w){ const a=idx.get(t); if(!a||a.length>cap) continue; for(const j of a) if(j>i) hit.set(j,(hit.get(j)||0)+1); }
     for(const [j,sh] of hit){
-      const g=F[j]; if(f.s.k===g.s.k||f.nm!==g.nm||(f.ans&&g.ans&&f.ans!==g.ans)||sh<Math.ceil(0.5*Math.min(f.w.size,g.w.size))) continue;   // a reworded copy has the same numbers and the same right answer
-      const sj=repJ(f.w,g.w), sc=f.cw.size&&g.cw.size?0.65*sj+0.35*repJ(f.cw,g.cw):sj;
-      if(sc>=0.8){ if(!nb[i].has(j)) nb[i].set(j,false); if(!nb[j].has(i)) nb[j].set(i,false); }
+      const g=F[j]; if(f.s.k===g.s.k||nb[i].has(j)||sh<Math.ceil(0.5*Math.min(f.w.size,g.w.size))) continue;   // a reworded copy comes from another source
+      const l=repPair(f,g); if(l>=0){ nb[i].set(j,l); nb[j].set(i,l); }
     }
   });
+  const comp=minL=>{ const p=F.map((_,i)=>i), fd=x=>{ while(p[x]!==x){ p[x]=p[p[x]]; x=p[x]; } return x; }; nb.forEach((m,i)=>{ for(const [j,l] of m) if(l>=minL) p[fd(i)]=fd(j); }); const g=new Map(); F.forEach((f,i)=>{ const r=fd(i); if(!g.has(r)) g.set(r,[]); g.get(r).push(f.c); }); return [...g.values()].filter(x=>x.length>1); };
+  REP.ex=comp(2); REP.mg=comp(1);   // groups of the same question / of the same question or a reworded copy
   const out=new Map();
   F.forEach((f,i)=>{
-    const src=new Map(); src.set(f.s.k,f.s.n); for(const y of (f.c.rep||[])) src.set(y[0],y[1]); let near=false;
-    for(const [j,exact] of nb[i]){ const g=F[j], add=(k,m)=>{ if(!src.has(k)){ src.set(k,m); if(!exact) near=true; } }; add(g.s.k,g.s.n); for(const y of (g.c.rep||[])) add(y[0],y[1]); }
-    src.delete(f.s.k); out.set(f.c.id,{n:src.size+1,names:[...src.values()],near});
+    const src=new Map(); src.set(f.s.k,f.s.n); let near=false; const sib=[]; for(const y of (f.c.rep||[])){ src.set(y[0],y[1]); if(y[2]) near=true; }
+    for(const [j,l] of nb[i]){ const g=F[j], add=(k,m,w)=>{ if(!src.has(k)){ src.set(k,m); if(l<2||w) near=true; } }; add(g.s.k,g.s.n); for(const y of (g.c.rep||[])) add(y[0],y[1],y[2]); if(l>=1) sib.push(g.c.id); }
+    src.delete(f.s.k); out.set(f.c.id,{n:src.size+1,names:[...src.values()],near,sib});
   });
   return out;
 }
 function repStamp(){ let s=cards.length; for(const c of cards) s+=String(c.front||'').length+(c.rep?c.rep.length*31:0)+(c.gone?7:0)+(c.choices||[]).length; return s+':'+cards.length; }
-function repEnsure(){ const st=repStamp(); if(REP.stamp!==st){ try{ REP.map=repCompute(); }catch(e){ REP.map=new Map(); } REP.stamp=st; } return REP.map; }
+/* The repeated-question check is slow on a big library and its answer only changes when the cards change, so the whole result (tags, groups and links between cards)
+   is kept in this browser and reused while a fingerprint of everything the check reads is unchanged. Any problem falls back to the normal calculation. */
+const REP_LS='br-rep-v2';
+function repHash(){ let h=2166136261>>>0; const mx=s=>{ s=String(s==null?'':s); for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619)>>>0; } h^=31; h=Math.imul(h,16777619)>>>0; };
+  for(const c of cards){ if(c.fm) continue; mx(c.id); mx(c.type); mx(c.front); mx(c.back); mx(c.answerText); mx(c.answer); mx(c.docName); mx(c.docId); mx(c.bank?1:0); mx(c.gone?1:0); mx((c.choices||[]).map(x=>x.k+'\u0002'+x.t).join('\u0001')); mx(c.rep?JSON.stringify(c.rep):''); }
+  return h.toString(36); }
+function repEnsure(){
+  const st=repStamp(); if(REP.stamp===st) return REP.map;
+  let hs=null; try{ hs=st+'|'+repHash(); const raw=localStorage.getItem(REP_LS);
+    if(raw){ const o=JSON.parse(raw);
+      if(o&&o.s===hs&&Array.isArray(o.m)&&Array.isArray(o.t)&&Array.isArray(o.i)&&Array.isArray(o.ex)&&Array.isArray(o.mg)){
+        const L=o.i, byId=new Map(); if(!Array.isArray(L)) throw new Error('bad'); for(const c of cards) byId.set(c.id,c);
+        const grp=l=>l.map(g=>g.map(k=>{ const c=byId.get(L[k]); if(!c) throw new Error('card missing'); return c; }));
+        const m=new Map(); for(const e of o.m) m.set(L[e[0]],{n:e[1],names:e[2].map(i=>o.t[i]),near:!!e[3],sib:(e[4]||[]).map(k=>L[k])});
+        const ex=grp(o.ex), mg=grp(o.mg); REP.map=m; REP.ex=ex; REP.mg=mg; REP.stamp=st; return m; } } }catch(e){}
+  try{ REP.map=repCompute(); }catch(e){ REP.map=new Map(); } REP.stamp=st;
+  if(hs!==null) try{ const tb=[], ix=new Map(), idl=[], ii=new Map(), m=[]; const I=id=>{ let i=ii.get(id); if(i===undefined){ i=idl.length; ii.set(id,i); idl.push(id); } return i; };
+    for(const [id,v] of REP.map){ if(v.n<2&&!(v.sib&&v.sib.length)) continue; m.push([I(id),v.n,v.names.map(x=>{ let i=ix.get(x); if(i===undefined){ i=tb.length; ix.set(x,i); tb.push(x); } return i; }),v.near?1:0,(v.sib||[]).map(I)]); }
+    const gi=l=>l.map(g=>g.map(c=>I(c.id))); const ex=gi(REP.ex), mg=gi(REP.mg); const js=JSON.stringify({s:hs,t:tb,i:idl,m,ex,mg});
+    if(js.length<1000000) localStorage.setItem(REP_LS,js); else localStorage.removeItem(REP_LS); }catch(e){}
+  return REP.map;
+}
 const repInfo=c=>c&&!c.fm?REP.map.get(c.id):null;
 const repN=c=>{ const i=repInfo(c); return i?i.n:1; };
 const repNote=i=>'Also in: '+i.names.join(', ')+(i.near?' (some of them reworded)':'');
 function repTag(q){ const i=repInfo(q); return i&&i.n>=2?`<span class="reptag" title="${esc(repNote(i))}">Repeated ×${i.n}</span>`:''; }
 function repLine(q){ const i=repInfo(q); return i&&i.n>=2?`<div class="src" title="${esc(repNote(i))}"><span>Also in:&nbsp;</span><b>${esc(i.names.join(', '))}</b>${i.near?'<span>&nbsp;(some reworded)</span>':''}</div>`:''; }
 const repFirstSort=l=>S.repFirst?l.map(c=>[c,repN(c)]).sort((a,b)=>b[1]-a[1]).map(x=>x[0]):l;   // the sort is stable, so cards with the same count stay shuffled
-const dupCount=()=>{ const seen=new Set(); let n=0; for(const c of cards){ const k=cardKey(c); if(seen.has(k)) n++; else seen.add(k); } return n; };
-async function dedupeCards(){   // keep one copy of each card, preferring the one that has been studied the most
-  const best=new Map(); for(const c of cards){ const k=cardKey(c), b=best.get(k); if(!b||(c.attempts||0)>(b.attempts||0)) best.set(k,c); }
-  const keep=new Set(best.values()), gone=cards.filter(c=>!keep.has(c));
-  for(const g of gone){ const b=best.get(cardKey(g)); if(b&&!b.fm&&repFrom(b,g,true)) await DB.put('questions',b); }   // the copy goes, but the kept card remembers where else the question was
-  for(const g of gone) if(g.star){ const b=best.get(cardKey(g)); if(b&&!b.star){ b.star=true; await DB.put('questions',b); } }   // a star on a removed copy moves to the one we keep
-  for(const c of gone) await DB.del('questions',c.id);
-  cards=cards.filter(c=>keep.has(c)); return gone.length;
+const repGone=g=>{ const bank=g.filter(c=>c.bank).length; return bank?g.length-bank:g.length-1; };   // a class-bank card is never removed: the sheet owns it
+const dupCount=()=>{ repEnsure(); return REP.ex.reduce((n,g)=>n+repGone(g),0); };   // the same question again
+const repWordedCount=()=>{ repEnsure(); return Math.max(0,REP.mg.reduce((n,g)=>n+repGone(g),0)-dupCount()); };   // the same question, worded a little differently
+let REPUNDO=null;
+/* Merge copies of one question into one card. The card that stays keeps the best of both: the most practised ratings, a star, the answer key and solution if only the copy had them, and the list of sources. */
+async function repMerge(level){
+  repEnsure(); const groups=(level>=1?REP.mg:REP.ex).map(g=>g.slice()), u={keep:[],del:[]}; let removed=0;
+  const rank=c=>[c.bank?1:0,c.manual?1:0,c.type==='mcq'?(c.answer?1:0):1,c.solution?1:0];
+  for(const g of groups){
+    const sorted=g.slice().sort((a,b)=>{ const x=rank(a), y=rank(b); for(let i=0;i<x.length;i++) if(x[i]!==y[i]) return y[i]-x[i]; return (b.attempts||0)-(a.attempts||0); });
+    const keep=sorted[0], others=g.filter(c=>c!==keep&&!c.bank&&!c.fm); if(!others.length) continue;
+    u.keep.push(clone(keep)); for(const o of others) u.del.push(clone(o));
+    const best=[keep,...others].sort((a,b)=>(b.attempts||0)-(a.attempts||0))[0];
+    if(best!==keep&&(best.attempts||0)>(keep.attempts||0)){ keep.sr=clone(best.sr); keep.attempts=best.attempts||0; keep.correct=best.correct||0; keep.check=best.check||null; if(best.miss!==undefined) keep.miss=best.miss; keep.mod=Date.now(); }
+    if(!keep.star&&others.some(o=>o.star)){ keep.star=true; keep.mod=Date.now(); }
+    if(!keep.solution){ const o=others.find(o=>o.solution); if(o) keep.solution=o.solution; }
+    for(const o of others) repFrom(keep,o,true);
+    await DB.put('questions',keep);
+    for(const o of others) await DB.del('questions',o.id);
+    removed+=others.length;
+  }
+  if(removed){ const gone=new Set(u.del.map(c=>c.id)); cards=cards.filter(c=>!gone.has(c.id)); ctombAdd([...gone]); REPUNDO=u; }
+  REP.stamp=''; buildQueue(); return removed;
 }
+async function repUndo(){
+  const u=REPUNDO; if(!u) return 0; REPUNDO=null;
+  for(const k of u.keep){ const i=cards.findIndex(c=>c.id===k.id); if(i>=0) cards[i]=k; else cards.push(k); await DB.put('questions',k); }
+  for(const o of u.del){ if(!cards.some(c=>c.id===o.id)) cards.push(o); delete CT[o.id]; await DB.put('questions',o); }
+  saveCT(); gsDirty(); REP.stamp=''; buildQueue(); return u.del.length;
+}
+const dedupeCards=()=>repMerge(2);   // "Remove duplicates": the same question, in whatever order or notation
+/* a session shows a question once: of two copies, only the first one drawn is used */
+function repTake(list,n,used){ const out=[]; for(const c of list){ if(out.length>=n) break; const i=repInfo(c), sib=i&&i.sib?i.sib:[]; if(used.has(c.id)||sib.some(x=>used.has(x))) continue; out.push(c); used.add(c.id); } return out; }
 async function saveCards(d,list){
   const old=cards.filter(c=>c.docId===d.id), norm=x=>String(x||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim().slice(0,40);
   const oldKey=new Map(old.map(c=>[cardKey(c),c])), oldId=new Map(old.map(c=>[c.id,c]));
   for(const o of old) await DB.del('questions',o.id);
   cards=cards.filter(c=>c.docId!==d.id);
-  const owner=new Map(); for(const c of cards){ const k=cardKey(c); if(!owner.has(k)) owner.set(k,c); }
   const mine=new Set(), me={k:'f:'+normName(d.name),n:d.name}, touched=new Set(); let skipped=0;
-  list=list.filter(p=>{ const k=cardKey(p); if(mine.has(k)){ skipped++; return false; } mine.add(k);   // a repeat inside this file: skipped, not counted
-    const o=owner.get(k); if(o){ skipped++; if(!o.fm&&repAdd(o,me)) touched.add(o); return false; } return true; });   // another source already has this card: keep that one and remember that this file had it too
+  const ex=cards.filter(c=>!c.fm&&!c.gone&&String(c.front||'').trim()).map(c=>repFacts(c)), ownerRk=new Map(), tix=new Map(), cap=Math.max(60,Math.round(ex.length*0.02));
+  for(const f of ex){ if(!ownerRk.has(f.rk)) ownerRk.set(f.rk,f); if(f.w.size>=2) for(const t of f.w){ let a=tix.get(t); if(!a){ a=[]; tix.set(t,a); } a.push(f); } }
+  const oldRk=new Map(old.map(c=>[repKey(c),c]));
+  list=list.filter(p=>{ const f=repFacts(p,me); if(mine.has(f.rk)){ skipped++; return false; } mine.add(f.rk);   // a repeat inside this file: skipped, not counted
+    let o=null, reworded=false; const e=ownerRk.get(f.rk); if(e&&repPair(f,e)===2) o=e.c;
+    if(!o&&f.w.size>=2){   // a reworded copy of a question another source has
+      const hit=new Map(); for(const t of f.w){ const a=tix.get(t); if(!a||a.length>cap) continue; for(const g of a) hit.set(g,(hit.get(g)||0)+1); }
+      for(const [g,sh] of hit){ if(g.s.k===me.k||sh<Math.ceil(0.5*Math.min(f.w.size,g.w.size))) continue; if(repPair(f,g)===1){ o=g.c; reworded=true; break; } }
+    }
+    if(!o) return true;
+    skipped++;   // another source already has this question: keep that one, remember that this file had it too, and keep what was done with this copy
+    if(!o.fm){
+      if(repAdd(o,reworded?Object.assign({w:1},me):me)) touched.add(o);
+      const pv=oldKey.get(cardKey(p))||oldRk.get(f.rk);
+      if(pv&&(pv.attempts||0)>(o.attempts||0)){ o.sr=pv.sr; o.attempts=pv.attempts||0; o.correct=pv.correct||0; o.check=pv.check||null; if(pv.miss!==undefined) o.miss=pv.miss; if(pv.star) o.star=true; o.mod=Date.now(); touched.add(o); }
+      else if(pv&&pv.star&&!o.star){ o.star=true; o.mod=Date.now(); touched.add(o); }
+      if(!o.solution&&p.solution){ o.solution=p.solution; touched.add(o); }
+    }
+    return false; });
   list.forEach((p,i)=>{
     const c=classify(p,d.name), id=`${d.id}-${i}`;
     const topic=p.setTopic||c.topic, lesson=pickLesson(topic,[p.front,p.back,p.answerText,p.solution,...p.choices.map(x=>x.t)].join(' '),p.ctx);
@@ -1919,7 +2007,7 @@ function studyAll(){
   if(ST.cache&&ST.cache.v===ST.v) return ST.cache.list;
   const stPhys=x=>PHYS_GENERIC.test(x.topic)&&(x.subject==='ESAS'||x.subject==='General')?{...x,subject:'ESAS',topic:physicsTo({front:x.title,back:x.body})}:x;   // items saved before the Physics split
   const raw=[...ST.built.filter(x=>!ST.hidden.has(x.id)),...ST.files.flatMap(f=>f.items.map(x=>({...x,id:'f:'+f.id+':'+x.id,file:f.id,fname:f.name}))),...ST.mine.map(x=>({...x,own:true}))].map(stPhys);
-  const so=s=>{ const i=ST_SUBJ.indexOf(s); return i<0?9:i; }, to=(s,t)=>{ const i=s==='General'?-1:topicsFor(s).indexOf(t); return i<0?999:i; };
+  const tix={}, so=s=>{ const i=ST_SUBJ.indexOf(s); return i<0?9:i; }, to=(s,t)=>{ if(s==='General') return 999; let m=tix[s]; if(!m){ m=tix[s]=new Map(); topicsFor(s).forEach((n,i)=>{ if(!m.has(n)) m.set(n,i); }); } const i=m.get(t); return i===undefined?999:i; };   // topic order is worked out once per subject, not once per comparison (topicsFor scans every card)
   const list=raw.map((x,i)=>({x,i})).sort((a,b)=>so(a.x.subject)-so(b.x.subject)||to(a.x.subject,a.x.topic)-to(b.x.subject,b.x.topic)||(a.x.topic<b.x.topic?-1:a.x.topic>b.x.topic?1:0)||a.i-b.i).map(o=>o.x);
   ST.cache={v:ST.v,list}; return list;
 }
@@ -2439,7 +2527,8 @@ function starMissToggles(){   // drill filters: only shown once there is somethi
 function nokeyToggle(){ const n=cards.filter(c=>c.type==='mcq'&&!c.answer).length; return (n||S.nokey)?`<label><input type="checkbox" data-change="nokey" ${S.nokey?'checked':''}> No answer key (${n})</label>`:''; }
 function buildQueue(){
   repEnsure(); const pool=filtered(), ord=l=>repFirstSort(shuffle(l));   // repeated questions first when that setting is on
-  S.queue=(S.starred||S.missed?ord(pool):[...ord(pool.filter(isNew)).slice(0,newLimit()),...ord(pool.filter(isDue))]).map(c=>c.id);   // cards you have not seen come first, then the ones that are due. Starred / missed: every matching card, due or not
+  const used=new Set();   // a question that two cards share is drawn once
+  S.queue=(S.starred||S.missed?repTake(ord(pool),Infinity,used):(()=>{ const due=repTake(ord(pool.filter(isDue)),Infinity,used); return [...repTake(ord(pool.filter(isNew)),newLimit(),used),...due]; })()).map(c=>c.id);   // cards you have not seen come first, then the ones that are due. Starred / missed: every matching card, due or not
   S.revealed=false; S.picked=null; S.hist=[]; S.again=null;
 }
 /* Choices that point at other choices ("Both A and B", "Either of A or C", "All of the above") stay at the bottom in their own order.
@@ -2711,16 +2800,17 @@ function syncLogs(file,apply){   // adds what the other device did on each day; 
   return days;
 }
 function syncPlan(file,mode){
-  const plan={mode,add:[],upd:[],keep:0,same:0,wait:{},skip:file.skipped||0,days:syncLogs(file,false),study:syncStudyNew(file.study,mode),del:[]};
+  const plan={mode,add:[],upd:[],adopt:[],keep:0,same:0,wait:{},skip:file.skipped||0,days:syncLogs(file,false),study:syncStudyNew(file.study,mode),del:[]};
+  const twinOf=new Map(); for(const c of cards) if(!c.fm&&!c.bank&&!c.gone&&String(c.front||'').trim()){ const k=repKey(c); if(!twinOf.has(k)) twinOf.set(k,c); }   // both devices read the same files, but their card ids differ
   for(const r of file.cards){
     const loc=byId(r.id);
-    if(!loc){ if(r.slim){ if(/^(bk|fm):/.test(r.id)) plan.wait[r.id]=r; else plan.skip++; } else if(Math.max(CT[r.id]||0,(file.ctomb||{})[r.id]||0)>=(+r.mod||0)&&(CT[r.id]||(file.ctomb||{})[r.id])) plan.same++; else plan.add.push(r); continue; }
+    if(!loc){ if(r.slim){ if(/^(bk|fm):/.test(r.id)) plan.wait[r.id]=r; else plan.skip++; } else if(Math.max(CT[r.id]||0,(file.ctomb||{})[r.id]||0)>=(+r.mod||0)&&(CT[r.id]||(file.ctomb||{})[r.id])) plan.same++; else{ const tw=typeof r.front==='string'?twinOf.get(repKey(r)):null; if(tw){ plan.same++; if((+r.attempts||0)>(tw.attempts||0)&&!plan.adopt.some(a=>a.id===tw.id)) plan.adopt.push({id:tw.id,r}); } else plan.add.push(r); } continue; }
     if(progSame(loc,r)){ plan.same++; continue; }
     if(syncWin(loc,r,mode)==='file') plan.upd.push(r); else plan.keep++;
   }
   for(const [id,t] of Object.entries(file.ctomb||{})){ const loc=byId(id); if(loc&&!loc.bank&&!loc.fm&&t>=(+loc.mod||0)) plan.del.push(id); }   // deleted on the other device
   plan.waiting=Object.keys(plan.wait).length;
-  plan.nothing=!plan.add.length&&!plan.upd.length&&!plan.del.length&&!plan.days&&!plan.study&&!plan.waiting;
+  plan.nothing=!plan.add.length&&!plan.upd.length&&!plan.adopt.length&&!plan.del.length&&!plan.days&&!plan.study&&!plan.waiting;
   return plan;
 }
 function syncPatch(c,r){   // a "what you did" record onto a card whose wording comes from the class sheet
@@ -2750,6 +2840,7 @@ async function syncRun(file,mode,undo){   // puts the file's progress onto this 
     if(r.slim) syncPatch(loc,r); else cards[i]=r;
     await DB.put('questions',cards[i]);   // saved as it came: the file's own stamp stays on the card
   }
+  for(const a of plan.adopt){ const loc=byId(a.id); if(!loc) continue; if(undo) undo.cards.push(clone(loc)); syncPatch(loc,a.r); await DB.put('questions',loc); }   // the same question on both devices: the more practised copy's ratings go onto the one that is here
   for(const r of plan.add){ if(byId(r.id)) continue; cards.push(r); if(undo) undo.added.push(r.id); await DB.put('questions',r); }
   for(const id of plan.del){ const i=cards.findIndex(c=>c.id===id); if(i<0) continue; if(undo) undo.cards.push(clone(cards[i])); cards.splice(i,1); await DB.del('questions',id); }
   if(plan.waiting){ const p=(await Meta.get('sync-pending'))||{}; for(const [id,r] of Object.entries(plan.wait)){ if(!p[id]||(+p[id].mod||0)<=(+r.mod||0)) p[id]=r; } await Meta.set('sync-pending',p); }
@@ -3589,7 +3680,7 @@ function renderLibrary(){
     <p class="note">Lets the downloaded file fix unclear cards without Claude. Make a key at aistudio.google.com/app/apikey. It is saved only in this browser. Free-tier limits apply, and Google may use free-tier requests to improve its products. This does not work on the claude.ai page.</p>
     <div class="controls"><label>Pages per run <select data-change="fixn">${[['3','3'],['5','5'],['10','10'],['0','All']].map(([v,l])=>`<option value="${v}" ${String(FIXN())===v?'selected':''}>${l}</option>`).join('')}</select></label><label>Key <input type="password" data-change="gkey" value="${esc(gKey())}" placeholder="Paste key" style="width:260px"></label><label>Model <input type="text" data-change="gmodel" value="${esc(gModel())}" style="width:170px"></label></div></details></div>`;
   h+='<div class="lbr">'+questionGuidePanel();
-  if(dupCount()) h+=`<div class="panel"><div class="note" style="margin:0 0 8px">${dupCount()} cards are copies of another card (same question and choices).</div><button class="btn small" data-act="dedupe">Remove ${dupCount()} duplicate cards</button></div>`;
+  if(dupCount()||repWordedCount()||REPUNDO) h+=`<div class="panel">${dupCount()?`<div class="note" style="margin:0 0 8px">${dupCount()} cards are the same question as another card (same wording and choices, in any order).</div><button class="btn small" data-act="dedupe">Remove ${dupCount()} duplicate cards</button> `:''}${repWordedCount()?`<div class="note" style="margin:${dupCount()?'10px':'0'} 0 8px">${repWordedCount()} more are the same question worded a little differently (same numbers, same right answer).</div><button class="btn small" data-act="repmerge">Merge ${repWordedCount()} reworded copies</button> `:''}<div class="note" style="margin:8px 0 0">One card stays and is marked Repeated. Your ratings, stars and solutions are kept on it.</div>${REPUNDO?`<button class="btn small" style="margin-top:8px" data-act="repundo">Undo the last merge (${REPUNDO.del.length} cards)</button>`:''}</div>`;
   if(cards.some(c=>!c.fm)){ const nr=cards.filter(c=>!c.fm&&repN(c)>=2).length; h+=`<div class="panel"><b>Repeated questions</b><p class="note" style="margin:6px 0 8px">${nr?`${nr} question${nr===1?'':'s'} show${nr===1?'s':''} up in more than one of your sources. They are marked Repeated and come first in Practice.`:'No question shows up in more than one source yet.'} Repeats are counted when a file is read, so for files you added before this update press Recount.</p><button class="btn small" data-act="recount" ${S.busy?'disabled':''}>Recount from my files</button></div>`; }
   h+=`<div class="panel">`;
   if(!docs.length) h+=`<div class="empty">Nothing added yet.</div>`;
@@ -3757,11 +3848,11 @@ function qzStart(only){   // draw the cards: the chosen number from each topic a
     const rows=qzGrid(), by=new Map();
     for(const c of cards.filter(x=>!x.fm)){ if(qzMode(c)==='Solving'&&lvSkip(c)) continue; const k=qzKey(c.subject||'Unsorted',c.topic,qzMode(c)); if(!by.has(k)) by.set(k,[]); by.get(k).push(c); }
     const rank=c=>isMissed(c)?0:(!c.sr.seen&&!(c.attempts>0))?1:2;   // missed first, then never seen, then the rest
-    let pick=[];
+    let pick=[]; const usedQ=new Set(); repEnsure();
     for(const r of rows) for(const m of QZ_MODES){
       const k=qzKey(r.s,r.t,m), n=Math.min(S.qz.set[k]||0,r[m]); if(!n) continue;
       const pool=repFirstSort(shuffle(by.get(k)||[])); if(S.qz.pick==='weak') pool.sort((a,b)=>rank(a)-rank(b));   // the sort is stable, so cards of the same kind stay shuffled
-      pick.push(...pool.slice(0,n));
+      pick.push(...repTake(pool,n,usedQ));
     }
     if(S.qz.order==='mixed') pick=shuffle(pick);
     ids=pick.map(c=>c.id);
@@ -4073,6 +4164,8 @@ document.addEventListener('click',async e=>{
   else if(a==='kick_hide'){ kickSet('off'); }
   else if(a==='kick_goal'){ kickGoalSet(); }
   else if(a==='dedupe'){ const n=await dedupeCards(); toast(n+' duplicate cards removed'); }
+  else if(a==='repmerge'){ const n=await repMerge(1); toast(n+' cards merged into the ones you already have'); }
+  else if(a==='repundo'){ const n=await repUndo(); toast(n+' cards put back'); }
   else if(a==='deldoc'){
     const dd=docs.find(d=>d.id===v), rk=dd?'f:'+normName(dd.name):null;
     ctombAdd(cards.filter(c=>c.docId===v&&!c.bank&&!c.fm).map(c=>c.id));
