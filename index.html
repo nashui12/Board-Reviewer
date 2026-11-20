@@ -306,6 +306,79 @@ kbd{display:inline-block; font:600 .78em/1 "Bricolage Grotesque",system-ui,sans-
 .qscore{font-size:1.1rem; margin-bottom:8px; display:flex; align-items:baseline; gap:6px; flex-wrap:wrap}
 .qscore b{font-size:2.2rem; font-weight:800; line-height:1}
 .qscore span{margin-left:auto; font-weight:800; font-size:1.3rem}
+.qhr{display:flex; align-items:center; gap:8px}
+.qclock{font-variant-numeric:tabular-nums; font-weight:800; font-size:.95rem; padding:3px 10px; border-radius:8px; border:1.5px solid var(--line); background:var(--soft); color:var(--ink); white-space:nowrap}
+.qclock.warn{border-color:var(--warn); color:var(--warn)}
+.qclock.low,.qclock.over{border-color:var(--bad); color:var(--bad)}
+.pclock{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0 0; padding:10px 12px; border:1.5px solid var(--line); border-radius:10px; background:var(--soft)}
+.pclock .qclock{font-size:1.25rem}
+.seg .n{background:var(--info)}
+.qnavrow{display:flex; gap:8px; align-items:center; margin:8px 0 0}
+.qnav{display:flex; gap:6px; overflow-x:auto; padding:9px 5px 10px; flex:1; min-width:0; scrollbar-width:thin}
+.qnavgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(42px,1fr)); gap:8px; margin:10px 0 4px; padding-top:4px}
+.qn{flex:0 0 auto; min-width:40px; height:40px; padding:0 6px; border:1.5px solid var(--line); border-radius:10px; background:var(--card); font-weight:700; font-variant-numeric:tabular-nums; position:relative}
+.qn.done{background:color-mix(in srgb,var(--info) 18%,var(--card)); border-color:var(--info)}
+.qn.skip{border-style:dashed; border-color:var(--warn); color:var(--warn)}
+.qn.flag::after{content:'\2691'; position:absolute; top:-7px; right:-4px; font-size:.78rem; color:var(--warn); background:var(--card); border-radius:50%; line-height:1}
+.qn.cur{box-shadow:0 0 0 2px var(--ink); border-color:var(--ink)}
+.qconf{margin:12px 0 4px; padding:12px 14px; border:1.5px solid var(--warn); border-radius:10px; background:color-mix(in srgb,var(--warn) 9%,var(--card))}
+.qtxt{display:block; margin-top:12px; font-weight:600; font-size:.9rem}
+.qtxt small{font-weight:400; color:var(--mute)}
+.qtxt textarea{display:block; width:100%; box-sizing:border-box; margin-top:6px; min-height:5.5em; padding:9px 10px; border:1.5px solid var(--line); border-radius:10px; background:var(--soft); color:var(--ink); font:inherit; font-weight:400; resize:vertical}
+.ytxt{margin:10px 2px 0}
+.choice.sel{border-color:var(--info); background:color-mix(in srgb,var(--info) 14%,var(--card)); box-shadow:inset 0 0 0 1.5px var(--info)}
+.qnavbtn .btn:last-child{margin-left:auto}
+.qnavbtn .btn[aria-pressed="true"]{border-color:var(--warn); color:var(--warn); background:color-mix(in srgb,var(--warn) 10%,var(--card))}
+.qmins{width:6.4em}
+.shl{display:block; margin:12px 0 0; font-size:.9rem; font-weight:600}
+.shl input[type=text],.shl input[type=url]{display:block; width:100%; box-sizing:border-box; margin-top:6px; padding:9px 10px; border:1.5px solid var(--line); border-radius:10px; background:var(--soft); color:var(--ink); font:inherit; font-weight:400}
+.shl.chk{display:flex; gap:8px; align-items:center; font-weight:400}
+.linkbox{margin-top:12px; padding:10px 12px; border:1.5px solid var(--line); border-radius:10px; background:var(--soft)}
+.linkbox input{display:block; width:100%; box-sizing:border-box; padding:8px 10px; border:1.5px solid var(--line); border-radius:8px; background:var(--card); color:var(--ink); font:.78rem ui-monospace,Menlo,Consolas,monospace; text-overflow:ellipsis}
+.qbar{flex-wrap:wrap} .qbtns{display:flex; gap:8px; margin-left:auto}
+.sheetgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:0 28px; margin-top:8px}
+.shrow{display:flex; align-items:center; gap:12px; padding:7px 0; border-top:1px solid var(--line)}
+.shrow>b{flex:0 0 2.2em; text-align:right; font-variant-numeric:tabular-nums}
+.shb{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+.bub{width:42px; height:42px; padding:0; border-radius:50%; border:1.5px solid var(--bd2); background:var(--card); font-weight:800}
+.bub.on{background:var(--ink); color:var(--bg); border-color:var(--ink)}
+@media (max-width:640px){ .qnavbtn .btn{padding:9px 11px} .qnavbtn .fl{display:none} .qans{display:none} }
+/* the printed test and answer key: only #printroot shows when printing */
+#printroot{display:none}
+@media print{
+  html,body{background:#fff !important; color:#000 !important}
+  body>*:not(#printroot){display:none !important}
+  #printroot{display:block !important}
+  @page{margin:14mm 13mm}
+  .pk{font:11pt/1.45 Newsreader,Georgia,"Times New Roman",serif; color:#000}
+  .pk *{color:#000; box-sizing:border-box}
+  .pk-h{display:flex; justify-content:space-between; align-items:flex-end; gap:16pt; border-bottom:2px solid #000; padding-bottom:6pt; margin-bottom:8pt}
+  .pk-h h1{font-size:18pt; margin:0}
+  .pk-h p{margin:2pt 0 0; font-size:9.5pt}
+  .pk-f{display:flex; gap:18pt; font-size:10pt}
+  .pk-f i{display:inline-block; width:120pt; border-bottom:1px solid #000; height:1em; vertical-align:baseline}
+  .pk-f i.s{width:34pt}
+  .pk-i{font-size:9.5pt; margin:0 0 12pt}
+  .pk-q{display:flex; gap:7pt; margin:0 0 13pt; break-inside:avoid}
+  .pk-n{flex:0 0 1.9em; text-align:right; font-weight:700}
+  .pk-b{flex:1; min-width:0}
+  .pk-s,.pk-sol{white-space:pre-wrap}
+  .pk-c{display:flex; gap:6pt; margin:2.5pt 0 0 1pt}
+  .pk-c b{flex:0 0 1.4em}
+  .pk-c.ok{font-weight:700}
+  .pk-w{position:relative; margin-top:7pt; height:4.2cm; border:1px solid #777; border-radius:3pt}
+  .pk-w.tall{height:6cm} .pk-w.short{height:1.8cm}
+  .pk-w span{position:absolute; top:2pt; left:5pt; font:7.5pt/1 Helvetica,Arial,sans-serif; color:#777}
+  .pk-sheet{break-before:page}
+  .pk-sheet h2{font-size:15pt; margin:0 0 4pt}
+  .pk-grid{columns:3; column-gap:12mm}
+  .pk-r{display:flex; align-items:center; gap:6pt; margin:0 0 7pt; break-inside:avoid}
+  .pk-r b{flex:0 0 2em; text-align:right; font-variant-numeric:tabular-nums}
+  .pk-r em{font-size:9pt; color:#555}
+  .pk-o{display:inline-flex; align-items:center; justify-content:center; width:1.55em; height:1.55em; border:1px solid #000; border-radius:50%; font:8pt Helvetica,Arial,sans-serif}
+  .pk-keyrow{display:flex; flex-wrap:wrap; gap:3pt 12pt; font-size:10pt; margin:0 0 12pt; padding:6pt 8pt; border:1px solid #999; break-inside:avoid}
+  .pk-sol{margin-top:6pt; padding-top:4pt; border-top:1px dotted #999; font-size:10.5pt}
+}
 @media (max-width:700px){ nav.tabs{display:grid; grid-template-columns:repeat(3,1fr)} }
 @media (max-width:520px){ .qrow{grid-template-columns:1fr 1fr} .qname{grid-column:1/-1} .qfill{margin-left:0} }
 @media (prefers-reduced-motion:reduce){ *{transition:none!important} }
@@ -831,6 +904,7 @@ if(S.repFirst===undefined) S.repFirst=true; if(!S.theme) S.theme='auto'; if(S.ha
 function applyTheme(){ const r=document.documentElement; if(S.theme==='auto') r.removeAttribute('data-theme'); else r.setAttribute('data-theme',S.theme); }
 applyTheme();
 /* loadView() runs in init, once the cards are known */
+const APP_VER='2026-11-21 · quiz links';   // shown at the bottom of Documents, so you can tell which copy of the app you are running
 const VIEW_KEY='br-view';
 function loadView(){   // the last subject / topic / type you were studying
   try{ const v=JSON.parse(localStorage.getItem(VIEW_KEY)||'{}');
@@ -862,7 +936,8 @@ const $ = s=>document.querySelector(s);
 const esc = s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const shuffle = a=>{ a=[...a]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
 const uid = ()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
-const byId = id=>cards.find(c=>c.id===id);
+const TMP=new Map();   // cards from a shared quiz link; they are never part of your own library
+const byId = id=>cards.find(c=>c.id===id)||TMP.get(id);
 let toastT; function toast(m){ const l=$('#live'); l.textContent=m; l.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>l.classList.remove('show'),3000); }
 const loaded={};
 function loadScript(src){
@@ -886,7 +961,7 @@ function canSync(){
   if(w==='unknown') return S.manualWifi;
   return false;
 }
-const PARSER_V=4;   // bump when text files should be read again
+const PARSER_V=5;   // bump when text files should be read again
 const isLocalFile = d=>/\.(txt|md|csv|text|opml)$/i.test(d.name);
 
 /* ================= cards ================= */
@@ -978,10 +1053,21 @@ function ownClosed(text,bodyAt){
   const rest=text.slice(bodyAt,bodyAt+2500), nx=new RegExp(numRe.source,'im').exec(rest), own=nx?rest.slice(0,nx.index):rest;
   return /(?:^|\n)[ \t]*(?:answer|ans\.?)\s*[:=]/i.test(own)||/(?:^|\s)\(?A[.)]\s[\s\S]*?(?:^|\s)\(?B[.)]\s/.test(own);
 }
+/* Where an answer-key table starts, or -1. "Answer key" counts only when a run of entries (1. A  2. B  3. C) follows it;
+   a solution that says "the answer key lists C" is just prose and must not cut the file. */
+function keyAt(text){
+  const re=/answer\s*key/gi; let m;
+  while((m=re.exec(text))){
+    if(m.index<=text.length*0.4) continue;
+    const after=text.slice(m.index+m[0].length,m.index+m[0].length+400).replace(/^[\s:.\-\u2013\u2014*_#]+/,'');
+    if(/^(?:\(?\d{1,3}\s*[.):\-]?\s*\(?[A-Fa-f]\)?(?=[\s,;]|$)[\s,;]*){2,}/.test(after)) return m.index;
+  }
+  return -1;
+}
 function parseNumbered(text,relaxed){
   PN.gaps=[]; PN.dropped=[]; let mixed=false;
   const keyMap={};
-  const km=text.search(/answer\s*key/i);
+  const km=keyAt(text);   // an "Answer Key" table at the end; the words alone, inside a solution, are not one
   if(km>-1 && km>text.length*0.4){
     const keyPart=text.slice(km); text=text.slice(0,km);
     const kre=/(\d{1,3})\s*[.):\-]?\s*\(?([A-Fa-f])\)?(?=\s|$|,|;)/g; let k;
@@ -2610,7 +2696,7 @@ async function undoRate(){   // step back one rated card, as many times as you l
   render(); toast('Back one card. Its rating is undone, so rate it again');
 }
 async function toggleStar(id){
-  const q=byId(id); if(!q) return; q.star=!q.star; await putQ(q); render(); toast(q.star?'Starred. Find it under "Starred" in the filters':'Star removed');
+  const q=byId(id); if(!q||q.tmp) return; q.star=!q.star; await putQ(q); render(); toast(q.star?'Starred. Find it under "Starred" in the filters':'Star removed');
 }
 async function setAnswer(id,k){   // for cards that came without an answer key
   const q=byId(id); if(!q||q.type!=='mcq'||!q.choices.some(c=>c.k===k)) return;
@@ -2640,7 +2726,7 @@ function logAdd(k,f,n){
   const e=LOG[k]||(LOG[k]={}); e[f]=Math.max(0,(e[f]||0)+n);
   const m=LOGD[device().id]||(LOGD[device().id]={}), x=m[k]||(m[k]={}); x[f]=Math.max(0,(x[f]||0)+n);
 }
-const putQ=q=>{ q.mod=Date.now(); gsDirty(); return DB.put('questions',q); };
+const putQ=q=>{ if(q.tmp) return Promise.resolve(); q.mod=Date.now(); gsDirty(); return DB.put('questions',q); };
 /* cards you delete (a document removed): a sync must not bring them back, and the other device should lose them too */
 const CTK='br-ctomb';
 function cleanTomb(o){   // id -> time of deletion, from a file or storage
@@ -3352,7 +3438,8 @@ function renderCardFace(q,mode,st){
     order.forEach((k,i)=>{
       let cls='';
       if(q.answer&&revealed){ if(k===q.answer) cls='right'; else if(st.picked===k) cls='wrong'; }
-      h+=`<button class="choice ${cls}" data-act="pick" data-v="${k}" ${revealed?'disabled':''}><span class="l">${String.fromCharCode(65+i)}.</span><span class="t">${fx(choiceText(q,k))}</span></button>`;
+      else if(!revealed&&st.sel===k) cls='sel';   // the quiz shows your pick without saying whether it is right
+      h+=`<button class="choice ${cls}" data-act="pick" data-v="${k}" ${revealed?'disabled':''}${st.sel!==undefined&&!revealed?` aria-pressed="${st.sel===k}"`:''}><span class="l">${String.fromCharCode(65+i)}.</span><span class="t">${fx(choiceText(q,k))}</span></button>`;
     });
   }
   if(revealed){
@@ -3719,6 +3806,7 @@ Solution: I = V / R = 120 / 10 = 12 A</pre>
 <p class="note">Math is typeset on screen: <code>V/R</code> and <code>(a+b)/(c+d)</code> become stacked fractions, <code>sqrt(x)</code> a root, <code>x^{2}</code> and <code>V_{out}</code> raised and lowered text. Greek letters can be typed as characters (α φ λ) or as words inside an equation (<code>theta = 30 deg</code>, <code>omega = 2 pi f</code>). A word next to ordinary words, as in “alpha particles”, stays a word.</p>
 <p class="note">Lines such as <code>@Subject: ESAS</code>, <code>@Topic: Communications</code>, <code>@Type: Terms</code> and <code>@Lesson: …</code> label every question below them until the next such line.</p>
 <p class="note">Numbered multiple-choice questions need to be in order. An "Answer Key" at the end (1. B  2. C …) also works. If a document has no recognizable cards, ${SAMPLE?'you can have Claude make cards from it.':'Claude can make cards from it when this page is opened inside Claude.'}</p></details></div>`;
+  h+=`<p class="note" id="app-ver" style="margin:14px 0 0;text-align:center">Board Reviewer · version ${APP_VER}</p>`;
   return h+'</div></div>';
 }
 const STRONG_DAYS=7;   // a card counts as strong once its next review is a week or more away
@@ -3777,13 +3865,13 @@ function renderProgress(){
   return h+'</div></div>';
 }
 /* ================= practice quiz: choose how many cards from each topic and type, then answer them in one sitting ================= */
-S.qz={set:{},pick:'random',order:'mixed',subj:'All',level:'Any',run:null,open:{},av:{}};
+S.qz={set:{},pick:'random',order:'mixed',subj:'All',level:'Any',tm:'count',mins:0,run:null,open:{},av:{}};
 const QZK='br-quiz', QZR='br-quizrun', QZ_MODES=['Solving','Terms'];
 const qzKey=(s,t,m)=>s+'\t'+t+'\t'+m;
 const qzMode=c=>c.mode==='Solving'?'Solving':'Terms';
 const qzAuto=q=>q.type==='mcq'&&!!q.answer;   // a multiple-choice card with an answer key marks itself; every other card you mark yourself
-const qzSave=()=>{ try{ localStorage.setItem(QZK,JSON.stringify({set:S.qz.set,pick:S.qz.pick,order:S.qz.order,subj:S.qz.subj,level:S.qz.level})); }catch(e){} };
-const qzSaveRun=()=>{ try{ const r=S.qz.run; if(!r) localStorage.removeItem(QZR); else localStorage.setItem(QZR,JSON.stringify({items:r.items.map(x=>[x.id,x.res,x.picked]),done:!!r.done})); }catch(e){} };
+const qzSave=()=>{ try{ localStorage.setItem(QZK,JSON.stringify({set:S.qz.set,pick:S.qz.pick,order:S.qz.order,subj:S.qz.subj,level:S.qz.level,tm:S.qz.tm,mins:S.qz.mins})); }catch(e){} };
+const qzSaveRun=()=>{ try{ const r=S.qz.run; if(r&&r.shared) return; if(!r) localStorage.removeItem(QZR); else localStorage.setItem(QZR,JSON.stringify({v:2,ph:r.phase,i:r.i,el:Math.round(r.el||0),lim:r.lim||0,tm:r.tm,paper:r.paper?1:0,w:r.w||0,go:r.phase==='paper'&&r.run?1:0,sh:r.sheeted?1:0,items:r.items.map(x=>[x.id,x.res||null,x.picked||null,x.text||'',x.flag?1:0,x.skip?1:0,x.ok?1:0,Math.round(x.t||0),x.pend?1:0])})); }catch(e){} };
 function loadQuiz(){   // the counts you last chose, and a quiz you were part-way through
   try{
     const v=JSON.parse(localStorage.getItem(QZK)||'{}')||{};
@@ -3794,13 +3882,19 @@ function loadQuiz(){   // the counts you last chose, and a quiz you were part-wa
     if(['mixed','topic'].includes(v.order)) S.qz.order=v.order;
     if(['All',...SUBJECTS,'Unsorted'].includes(v.subj)) S.qz.subj=v.subj;
     if(['Any',...LV].includes(v.level)) S.qz.level=v.level;
+    if(['count','watch','off'].includes(v.tm)) S.qz.tm=v.tm;
+    if(Number.isInteger(v.mins)&&v.mins>=0&&v.mins<=600) S.qz.mins=v.mins;
   }catch(e){}
   try{
     const r=JSON.parse(localStorage.getItem(QZR)||'null');
     if(r&&Array.isArray(r.items)){
-      const ids=new Set(cards.map(c=>c.id));
-      const items=r.items.filter(x=>Array.isArray(x)&&typeof x[0]==='string'&&ids.has(x[0])).map(x=>({id:x[0],res:['right','wrong','skip'].includes(x[1])?x[1]:null,picked:typeof x[2]==='string'?x[2]:null}));
-      if(items.length){ const i=items.findIndex(x=>!x.res); S.qz.run={items,i:i<0?0:i,revealed:false,picked:null,done:!!r.done||i<0}; }
+      const ids=new Set(cards.map(c=>c.id)), v2=r.v===2;
+      const items=r.items.filter(x=>Array.isArray(x)&&typeof x[0]==='string'&&ids.has(x[0])).map(x=>({id:x[0],res:['right','wrong','skip'].includes(x[1])?x[1]:null,picked:typeof x[2]==='string'?x[2]:null,text:v2&&typeof x[3]==='string'?x[3]:'',flag:v2&&x[4]===1,skip:v2&&x[5]===1,ok:v2&&x[6]===1,t:v2&&isFinite(x[7])?+x[7]:0,pend:v2&&x[8]===1}));
+      if(items.length){
+        const base={items,i:0,phase:'done',tm:'off',lim:0,el:0,mark:null,run:false,paper:false,w:0,conf:false,nav:false,busy:false};
+        if(!v2) S.qz.run=base;   // a quiz begun before this update is shown as its results
+        else{ const ph=['take','paper','sheet','check','done'].includes(r.ph)?r.ph:'take'; S.qz.run={...base,i:Math.max(0,Math.min(items.length-1,+r.i||0)),phase:ph,tm:['count','watch','off'].includes(r.tm)?r.tm:'off',lim:+r.lim||0,el:+r.el||0,paper:!!r.paper,w:+r.w||0,sheeted:!!r.sh}; if(ph==='paper'&&r.go){ S.qz.run.run=true; S.qz.run.mark=Date.now(); } }
+      }
     }
   }catch(e){}
 }
@@ -3828,7 +3922,7 @@ function qzCellBtns(inp){ const st=inp.closest('.step'); if(!st) return; const b
 function qzPaint(){   // numbers change in place, so the list is not redrawn while you type or tap + / −
   const {tot,per}=qzCount();
   const t=document.getElementById('qz-total'); if(t) t.textContent=tot+' card'+(tot===1?'':'s')+' chosen';
-  const b=document.getElementById('qz-start'); if(b) b.disabled=!tot;
+  const b=document.getElementById('qz-start'); if(b) b.disabled=!tot; const pp=document.getElementById('qz-paper'); if(pp) pp.disabled=!tot; const mm=document.getElementById('qz-mins'); if(mm) mm.placeholder='auto: '+Math.max(1,qzAutoSet());
   document.querySelectorAll('[data-qsub]').forEach(x=>{ x.textContent=x.dataset.qsub==='All'?tot:(per[x.dataset.qsub]||0); });
 }
 function qzStep(b){
@@ -3841,7 +3935,15 @@ function qzFromInput(t,live){
   qzPut(k,n); if(!live){ t.value=n; qzCellBtns(t); qzSave(); }
   qzPaint();
 }
-function qzStart(only){   // draw the cards: the chosen number from each topic and type, or just the ones given
+/* The quiz is taken like an exam: nothing is revealed while you answer. You can skip a question and come back, flag it, change an answer, and
+   everything is graded when you submit. phase: take (answering) · paper (a printed test, clock only) · sheet (typing in the paper answers) ·
+   check (marking the cards that have no key) · done (results). Each item: id, picked, text, flag, skip, ok (a card with no choices that you moved past),
+   t (seconds spent), res (right, wrong), pend (waiting for you to mark it). */
+const QZ_MIN={Solving:3,Terms:1};   // minutes a card is allowed in a countdown, until you set your own total
+const qzAutoSet=()=>{ let s=0; for(const [k,n] of Object.entries(S.qz.set)){ const v=Math.min(n,S.qz.av[k]||0); if(v) s+=v*(QZ_MIN[k.split('\t')[2]]||1); } return s; };
+const qzAutoMins=list=>Math.max(1,list.reduce((a,c)=>a+(QZ_MIN[qzMode(c)]||1),0));
+function qzStart(only,opt){   // draw the cards: the chosen number from each topic and type, or just the ones given
+  opt=opt||{};
   let ids;
   if(only) ids=shuffle(only);
   else{
@@ -3858,41 +3960,251 @@ function qzStart(only){   // draw the cards: the chosen number from each topic a
     ids=pick.map(c=>c.id);
   }
   if(!ids.length){ toast('Choose at least one card first'); return false; }
-  S.qz.run={items:ids.map(id=>({id,res:null,picked:null})),i:0,revealed:false,picked:null,done:false}; S.qz.open={};
-  qzSaveRun(); try{ window.scrollTo(0,0); }catch(e){}
+  const list=ids.map(byId).filter(Boolean), tm=opt.tm||S.qz.tm, mins=only?0:S.qz.mins;   // a retry gets the automatic time for its own size
+  const lim=tm==='count'?Math.round((mins>0?mins:qzAutoMins(list))*60):0;
+  return qzNewRun(ids,{tm,lim,paper:opt.paper,shared:opt.shared});
+}
+function qzNewRun(ids,o){
+  ids.forEach(id=>{ delete S.orders[id]; });
+  S.qz.run={items:ids.map(id=>({id,res:null,picked:null,text:'',flag:false,skip:false,ok:false,t:0,pend:false})),i:0,phase:o.paper?'paper':'take',tm:o.tm,lim:o.lim,el:0,mark:o.paper||document.hidden?null:Date.now(),run:false,paper:!!o.paper,shared:!!o.shared,w:0,conf:false,nav:false,busy:false};
+  S.qz.open={}; qzSaveRun(); try{ window.scrollTo(0,0); }catch(e){}
   return true;
 }
-function qzCur(){   // the card on screen; a card deleted since the quiz began is passed over
-  const r=S.qz.run; while(r.i<r.items.length&&!byId(r.items[r.i].id)){ r.items[r.i].res=r.items[r.i].res||'skip'; r.i++; }
-  return r.i<r.items.length?r.items[r.i]:null;
+/* ---- the clock  return true;
 }
+/* ---- the clock: counts only while the page is on screen; a gap of more than half a minute means the device slept and is not counted ---- */
+const qzFmt=s=>{ s=Math.max(0,Math.round(s)); const h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=s%60; return (h?h+':'+String(m).padStart(2,'0'):m)+':'+String(x).padStart(2,'0'); };
+function qzFlush(){
+  const r=S.qz.run; if(!r||!r.mark) return; const now=Date.now(); let d=(now-r.mark)/1000; if(d<0) d=0; if(d>30) d=1;
+  r.mark=now; r.el=(r.el||0)+d;
+  if(r.phase==='take'){ const it=r.items[r.i]; if(it) it.t=(it.t||0)+d; }
+}
+const qzSecs=()=>{ const r=S.qz.run; return r?(r.el||0)+(r.mark?Math.min(30,Math.max(0,(Date.now()-r.mark)/1000)):0):0; };
+function qzClockText(r){ const s=qzSecs(); if(r.tm==='count'){ const left=r.lim-s; return left>=0?qzFmt(Math.ceil(left))+' left':'+'+qzFmt(Math.floor(-left))+' over'; } return qzFmt(s); }
+const qzClockCls=r=>{ if(r.tm!=='count') return ''; const left=r.lim-qzSecs(); return left<0?' over':left<=60?' low':(left<=300&&r.lim>=900)?' warn':''; };
+let QZ_TK=0;
+function qzTick(){
+  const r=S.qz.run; if(!r||document.hidden) return;
+  if(!(r.phase==='take'||(r.phase==='paper'&&r.run))) return;
+  if(!r.mark) r.mark=Date.now();
+  qzFlush();
+  const el=document.getElementById('qz-clock'); if(el){ el.textContent=qzClockText(r); el.className='qclock'+qzClockCls(r); }
+  if(r.tm==='count'){
+    const left=r.lim-r.el;
+    if(r.lim>=900&&left<=300&&!(r.w&1)){ r.w|=1; toast('5 minutes left'); }
+    if(r.lim>=180&&left<=60&&!(r.w&2)){ r.w|=2; toast('1 minute left'); }
+    if(left<=0&&!(r.w&4)){ r.w|=4; toast("Time's up. You can keep going; the extra time is counted."); }
+  }
+  if(++QZ_TK%15===0) qzSaveRun();
+}
+setInterval(qzTick,1000);
+document.addEventListener('visibilitychange',()=>{ const r=S.qz.run; if(!r) return; if(document.hidden){ qzFlush(); r.mark=null; qzSaveRun(); } else if(r.phase==='take'||(r.phase==='paper'&&r.run)) r.mark=Date.now(); });
+window.addEventListener('pagehide',()=>{ const r=S.qz.run; if(r){ qzFlush(); qzSaveRun(); } });
+/* ---- where you are ---- */
+const qzAns=(it,q)=>!!q&&(q.type==='mcq'?!!it.picked:!!((it.text||'').trim())||!!it.ok);   // a card with no choices counts once you write something or move past it
+function qzPrune(){   // cards deleted since the quiz began drop out
+  const r=S.qz.run; if(!r||r.items.every(x=>byId(x.id))) return;
+  const cur=r.items[r.i]; r.items=r.items.filter(x=>byId(x.id)); r.i=cur&&r.items.includes(cur)?r.items.indexOf(cur):Math.min(r.i,Math.max(0,r.items.length-1));
+}
+function qzCur(){ const r=S.qz.run; if(!r) return null; qzPrune(); return r.items[r.i]||null; }
+const qzPend=r=>r.items.find(x=>x.pend&&byId(x.id));
+function qzTally(r){ let ans=0,flag=0; const un=[]; r.items.forEach((x,i)=>{ if(qzAns(x,byId(x.id))) ans++; else un.push(i+1); if(x.flag) flag++; }); return {ans,flag,un,n:r.items.length}; }
 function qzLog(){ const k=dayKey(); logAdd(k,'r',1); logAdd(k,'qz',1); saveLog(); saveLogD(); }   // counts toward today's goal and your streak
-function qzAdvance(){
-  const r=S.qz.run, it=r.items[r.i]; if(it) delete S.orders[it.id];
-  r.i++; r.revealed=false; r.picked=null; if(r.i>=r.items.length) r.done=true;
+function qzLeave(r){ const it=r.items[r.i], q=it&&byId(it.id); if(it&&q&&q.type!=='mcq'&&!it.skip) it.ok=true; }
+function qzGo(j){
+  const r=S.qz.run; if(!r||r.phase!=='take') return; qzPrune(); j=Math.max(0,Math.min(r.items.length-1,j|0));
+  qzFlush(); if(j!==r.i) qzLeave(r); r.i=j; r.conf=false; qzSaveRun(); render(); try{ window.scrollTo(0,0); }catch(e){}
+}
+function qzNextOpen(r,from){   // the next question still waiting: untouched ones first, then the ones you skipped
+  const n=r.items.length, open=i=>!qzAns(r.items[i],byId(r.items[i].id));
+  for(let i=from+1;i<n;i++) if(open(i)&&!r.items[i].skip) return i;
+  for(let i=0;i<from;i++) if(open(i)&&!r.items[i].skip) return i;
+  for(let k=1;k<n;k++){ const i=(from+k)%n; if(open(i)) return i; }
+  return -1;
+}
+function qzMove(d){ const r=S.qz.run; if(!r||r.phase!=='take') return; if(d>0&&r.i>=r.items.length-1) return qzFinish(); qzGo(r.i+d); }
+function qzSkip(){
+  const r=S.qz.run; if(!r||r.phase!=='take') return; const it=qzCur(); if(!it) return;
+  if(qzAns(it,byId(it.id))) return qzMove(1);
+  it.skip=true; const j=qzNextOpen(r,r.i); if(j<0) return qzFinish(); qzGo(j);
+}
+function qzFlag(){ const r=S.qz.run, it=qzCur(); if(!r||r.phase!=='take'||!it) return; it.flag=!it.flag; qzSaveRun(); render(); }
+function qzPickAns(k){   // pick a choice; pick it again to clear it
+  const r=S.qz.run; if(!r||r.phase!=='take') return; const it=qzCur(); if(!it) return; const q=byId(it.id); if(!q||q.type!=='mcq') return;
+  it.picked=it.picked===k?null:k; if(it.picked) it.skip=false; qzSaveRun(); render();
+}
+function qzFinish(){ const r=S.qz.run; if(!r||r.phase!=='take') return; qzFlush(); qzLeave(r); r.conf=true; r.nav=false; S.refocus='qz-keep'; qzSaveRun(); render(); }
+async function qzSubmit(){   // grade every card that has a key; the others wait for you to mark them
+  const r=S.qz.run; if(!r||!(r.phase==='take'||r.phase==='sheet')||r.busy) return; r.busy=true;
+  qzFlush(); r.mark=null; r.run=false; r.conf=false; r.nav=false; qzPrune();
+  for(const it of r.items){
+    const q=byId(it.id); if(!q) continue; it.pend=false;
+    if(!qzAns(it,q)) continue;   // left blank: it does not score, and your ratings are not touched
+    if(qzAuto(q)){
+      const ok=it.picked===q.answer; it.res=ok?'right':'wrong';
+      if(!q.tmp){ q.attempts=(q.attempts||0)+1; tally('a',1); if(ok){ q.correct=(q.correct||0)+1; tally('c',1); } q.rn=(q.rn||0)+1; q.miss=!ok; qzLog(); await putQ(q); }
+    }else it.pend=true;
+  }
+  r.items.forEach(x=>{ delete S.orders[x.id]; });
+  r.phase=r.items.some(x=>x.pend)?'check':'done'; r.i=0; r.busy=false;
   qzSaveRun(); render(); try{ window.scrollTo(0,0); }catch(e){}
 }
-async function qzPick(k){
-  const r=S.qz.run; if(!r||r.done||r.revealed) return; const it=qzCur(); if(!it) return; const q=byId(it.id); if(!q||q.type!=='mcq') return;
-  r.picked=k; r.revealed=true; it.picked=k;
-  if(q.answer){
-    const ok=k===q.answer; it.res=ok?'right':'wrong';
-    q.attempts=(q.attempts||0)+1; tally('a',1); if(ok){ q.correct=(q.correct||0)+1; tally('c',1); }
-    q.rn=(q.rn||0)+1; q.miss=!ok; qzLog(); await putQ(q);
-  }
-  qzSaveRun(); render();
-}
-async function qzShow(){   // show the answer. A multiple-choice card with a key that you give up on counts as missed
-  const r=S.qz.run; if(!r||r.done||r.revealed) return; const it=qzCur(); if(!it) return; const q=byId(it.id); r.revealed=true;
-  if(qzAuto(q)){ it.res='skip'; q.rn=(q.rn||0)+1; q.miss=true; qzLog(); await putQ(q); }
-  qzSaveRun(); render();
-}
 async function qzGrade(ok){   // for cards that have no key to check against, you say whether you had it
-  const r=S.qz.run; if(!r||r.done||!r.revealed) return; const it=qzCur(); if(!it||it.res) return; const q=byId(it.id);
-  it.res=ok?'right':'wrong'; q.rn=(q.rn||0)+1; q.miss=!ok; qzLog(); await putQ(q); qzAdvance();
+  const r=S.qz.run; if(!r||r.phase!=='check') return; const it=qzPend(r); if(!it) return; const q=byId(it.id);
+  it.pend=false; it.res=ok?'right':'wrong'; if(!q.tmp){ q.rn=(q.rn||0)+1; q.miss=!ok; qzLog(); await putQ(q); }
+  if(!qzPend(r)) r.phase='done'; qzSaveRun(); render(); try{ window.scrollTo(0,0); }catch(e){}
 }
-function qzNext(){ const r=S.qz.run; if(!r||r.done||!r.revealed) return; const it=qzCur(); if(it&&it.res) qzAdvance(); }
-function qzEnd(){ const r=S.qz.run; if(!r) return; r.done=true; qzSaveRun(); }
+function qzSkipGrading(){ const r=S.qz.run; if(!r) return; r.items.forEach(x=>{ x.pend=false; }); r.phase='done'; qzSaveRun(); }
+/* ---- a printed test: print it, work on paper, then type the answers in ---- */
+function qzClockGo(on){ const r=S.qz.run; if(!r||r.phase!=='paper') return; if(on){ r.run=true; r.mark=document.hidden?null:Date.now(); } else{ qzFlush(); r.run=false; r.mark=null; } qzSaveRun(); }
+function qzToSheet(){
+  const r=S.qz.run; if(!r||r.phase!=='paper') return; qzFlush(); r.run=false; r.mark=null; r.phase='sheet';
+  if(!r.sheeted){ r.sheeted=true; r.items.forEach(x=>{ const q=byId(x.id); if(q&&q.type!=='mcq') x.ok=true; }); }   // cards with no choices start as attempted; untick the ones you left out
+  qzSaveRun(); try{ window.scrollTo(0,0); }catch(e){}
+}
+function qzToScreen(){ const r=S.qz.run; if(!r||r.phase!=='paper') return; r.phase='take'; r.paper=false; r.run=false; r.mark=document.hidden?null:Date.now(); r.i=0; qzSaveRun(); }
+function qzBubble(i,k){ const r=S.qz.run, it=r&&r.items[i]; if(!it||r.phase!=='sheet') return; it.picked=it.picked===k?null:k; qzSaveRun(); }
+function qzAttempt(i){ const r=S.qz.run, it=r&&r.items[i]; if(!it||r.phase!=='sheet') return; it.ok=!it.ok; qzSaveRun(); }
+function qzPrintHtml(kind){
+  const r=S.qz.run, its=r.items.map(x=>({x,q:byId(x.id)})).filter(o=>o.q), n=its.length, date=new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  const choices=(q,key)=>q.choices.map(c=>`<div class="pk-c${key&&c.k===q.answer?' ok':''}"><b>${esc(c.k)}.</b><span>${fx(c.t)}</span></div>`).join('');
+  let h=`<div class="pk">`;
+  if(kind==='test'){
+    const mins=r.lim?Math.round(r.lim/60):0;
+    h+=`<header class="pk-h"><div><h1>Practice test</h1><p>Board Reviewer · ${esc(date)}</p></div><div class="pk-f"><span>Name <i></i></span><span>Score <i class="s"></i> / ${n}</span></div></header><p class="pk-i">${n} question${n===1?'':'s'}${mins?' · '+mins+' minutes':''}. Choose the best answer and show your work in the space provided. Record your answers on the answer sheet at the end.</p>`;
+    its.forEach((o,k)=>{ const q=o.q, solving=qzMode(q)==='Solving';
+      h+=`<section class="pk-q"><div class="pk-n">${k+1}.</div><div class="pk-b"><div class="pk-s">${fx(q.front)}</div>${q.type==='mcq'?choices(q,false):''}${solving?`<div class="pk-w${q.type==='mcq'?'':' tall'}"><span>${q.type==='mcq'?'Solution':'Answer and solution'}</span></div>`:q.type==='mcq'?'':`<div class="pk-w short"><span>Answer</span></div>`}</div></section>`; });
+    h+=`<section class="pk-sheet"><h2>Answer sheet</h2><p class="pk-i">Fill in one circle for each question.</p><div class="pk-grid">`+its.map((o,k)=>o.q.type==='mcq'?`<div class="pk-r"><b>${k+1}</b>${o.q.choices.map(c=>`<span class="pk-o">${esc(c.k)}</span>`).join('')}</div>`:`<div class="pk-r"><b>${k+1}</b><em>written answer</em></div>`).join('')+`</div></section>`;
+  }else{
+    h+=`<header class="pk-h"><div><h1>Answer key and solutions</h1><p>Board Reviewer · ${esc(date)}</p></div></header>`;
+    h+=`<div class="pk-keyrow">`+its.map((o,k)=>`<span><b>${k+1}</b> ${o.q.type==='mcq'?esc(o.q.answer||'?'):'–'}</span>`).join('')+`</div>`;
+    its.forEach((o,k)=>{ const q=o.q;
+      const ans=q.type==='mcq'?(q.answer?`Answer: ${esc(q.answer)}. ${fx((q.choices.find(c=>c.k===q.answer)||{}).t||'')}`:'No answer key for this card.'):'';
+      const body=q.type==='mcq'?(q.solution||''):(q.type==='cloze'?q.answerText+'\n\n'+q.back:q.back);
+      h+=`<section class="pk-q"><div class="pk-n">${k+1}.</div><div class="pk-b"><div class="pk-s">${fx(q.front)}</div>${q.type==='mcq'?choices(q,true):''}<div class="pk-sol">${ans?`<b>${ans}</b>`:''}${body?`<div>${q.type==='mcq'?'':'<b>Answer:</b> '}${fx(body)}</div>`:''}</div></div></section>`; });
+  }
+  return h+`</div>`;
+}
+function qzPrint(kind){
+  const r=S.qz.run; if(!r) return;
+  let root=document.getElementById('printroot'); if(!root){ root=document.createElement('div'); root.id='printroot'; root.setAttribute('aria-hidden','true'); document.body.appendChild(root); }
+  root.innerHTML=qzPrintHtml(kind==='key'?'key':'test');
+  const old=document.title; document.title=kind==='key'?'Answer key and solutions':'Practice test';
+  const back=()=>{ document.title=old; window.removeEventListener('afterprint',back); };
+  window.addEventListener('afterprint',back); setTimeout(back,60000);
+  try{ window.print(); }catch(e){ back(); toast('Printing is not available in this browser'); }
+}
+/* ---- a quiz as a link: the questions travel inside the link (after the #), so nothing is stored on a server and the person who opens it needs no app,
+   account or sign-in; they open the site and the quiz is there. The part after the # is never sent to the web server. ---- */
+const SHARE_SITE='https://nashui12.github.io/Board-Reviewer/';
+const shareBase=()=>{
+  try{ const u=localStorage.getItem('br-site'); if(u&&/^https?:\/\//i.test(u)) return u.split('#')[0]; }catch(e){}
+  if(/^https?:$/.test(location.protocol)&&!/^(localhost|127\.|\[::1\])/.test(location.hostname)) return (location.origin+location.pathname).replace(/index\.html$/i,'');
+  return SHARE_SITE;
+};
+const shareLocal=()=>!/^https?:$/.test(location.protocol)||/^(localhost|127\.|\[::1\])/.test(location.hostname);
+const qzB64=b=>{ let s=''; for(let i=0;i<b.length;i+=0x8000) s+=String.fromCharCode.apply(null,b.subarray(i,i+0x8000)); return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); };
+const qzUnB64=t=>{ t=t.replace(/-/g,'+').replace(/_/g,'/'); while(t.length%4) t+='='; const s=atob(t), b=new Uint8Array(s.length); for(let i=0;i<s.length;i++) b[i]=s.charCodeAt(i); return b; };
+async function qzPipe(bytes,decode,max){   // run bytes through the browser's built-in deflate
+  const st=new (decode?DecompressionStream:CompressionStream)('deflate'), w=st.writable.getWriter(), rd=st.readable.getReader(), out=[]; let n=0;
+  const feed=(async()=>{ await w.write(bytes); await w.close(); })();
+  feed.catch(()=>{});   // a damaged link makes the write fail too; that is reported through the read below
+  for(;;){ const {done,value}=await rd.read(); if(done) break; n+=value.length; if(n>max){ try{ rd.cancel(); }catch(e){} throw new Error('big'); } out.push(value); }
+  await feed;
+  const r=new Uint8Array(n); let o=0; for(const c of out){ r.set(c,o); o+=c.length; } return r;
+}
+async function qzEncode(str){
+  const raw=new TextEncoder().encode(str);
+  try{ if(typeof CompressionStream!=='undefined') return 'z.'+qzB64(await qzPipe(raw,false,4e6)); }catch(e){}
+  return 'p.'+qzB64(raw);
+}
+async function qzDecode(tok){
+  const k=tok.slice(0,1); let b=qzUnB64(tok.slice(2));
+  if(k==='z'){ if(typeof DecompressionStream==='undefined') throw new Error('browser'); b=await qzPipe(b,true,1.5e6); }
+  else if(k!=='p'||b.length>1.5e6) throw new Error('bad');
+  return JSON.parse(new TextDecoder().decode(b));
+}
+function qzShareRow(q,sol){
+  const m=q.type==='mcq', ks=m?q.choices.map(c=>c.k).join(''):'';
+  const row=[q.subject||'',q.topic||'',qzMode(q)==='Solving'?'S':'T',m?'m':q.type==='cloze'?'c':'b',q.front||'',m?q.choices.map(c=>c.t):[],m&&ks!=='ABCDEFGH'.slice(0,ks.length)?ks:'',m?(q.answer||''):'',sol?(q.solution||''):'',m?'':(q.back||''),m?'':(q.answerText||'')];
+  while(row.length>5&&(row[row.length-1]===''||(Array.isArray(row[row.length-1])&&!row[row.length-1].length))) row.pop();
+  return row;
+}
+function qzShareCards(o){   // what a link carries is untrusted: every piece is checked and cut to size before it is used
+  if(!o||o.v!==1||!Array.isArray(o.q)||!o.q.length||o.q.length>400) throw new Error('bad');
+  const T=(x,n)=>typeof x==='string'?x.slice(0,n):'';
+  return o.q.map((r,i)=>{
+    if(!Array.isArray(r)) throw new Error('bad');
+    const type=r[3]==='m'?'mcq':r[3]==='c'?'cloze':'basic'; let ch=[], ans='';
+    if(type==='mcq'){
+      const tx=Array.isArray(r[5])?r[5].slice(0,8):[], ks=typeof r[6]==='string'&&r[6]?r[6]:'ABCDEFGH';
+      ch=tx.map((x,j)=>({k:/^[A-H]$/.test(ks[j]||'')?ks[j]:String.fromCharCode(65+j),t:T(x,1500)}));
+      if(ch.length<2) throw new Error('bad');
+      ans=ch.some(c=>c.k===r[7])?r[7]:'';
+    }
+    const subj=T(r[0],20).replace(/[^A-Za-z ]/g,'')||'Unsorted';
+    return {id:'sh:'+i,tmp:true,docId:'shared',docName:'Shared quiz',subject:subj,topic:T(r[1],80),mode:r[2]==='S'?'Solving':'Terms',type,front:T(r[4],4000),choices:ch,answer:ans,back:T(r[9],6000),answerText:T(r[10],2000),solution:T(r[8],6000),n:i+1,sr:{due:0,interval:0,ease:2.5,reps:0,lapses:0,seen:false},attempts:0,correct:0};
+  });
+}
+async function qzShareMake(){
+  const r=S.qz.run; if(!r||r.phase!=='paper'||r.busy) return; r.busy=true;
+  const items=r.items.map(x=>byId(x.id)).filter(Boolean), sol=S.shareSol!==false;
+  try{
+    const o={v:1,n:(S.shareName||'').trim().slice(0,80),m:r.tm,l:r.lim||0,q:items.map(q=>qzShareRow(q,sol))};
+    const url=shareBase()+'#quiz='+await qzEncode(JSON.stringify(o));
+    r.link=url.length>40000?{big:true,len:url.length,n:items.length}:{url,len:url.length,n:items.length,sol};
+  }catch(e){ r.link={fail:true}; }
+  r.busy=false; render();
+}
+async function qzCopyLink(){
+  const r=S.qz.run, url=r&&r.link&&r.link.url; if(!url) return;
+  try{ await navigator.clipboard.writeText(url); toast('Link copied'); return; }catch(e){}
+  const el=document.getElementById('qz-link'); if(el){ el.focus(); el.select(); try{ if(document.execCommand('copy')){ toast('Link copied'); return; } }catch(e){} }
+  toast('Press and hold the link, then choose Copy');
+}
+async function qzNativeShare(){
+  const r=S.qz.run, url=r&&r.link&&r.link.url; if(!url) return;
+  try{ await navigator.share({title:(S.shareName||'').trim()||'Practice quiz',text:'Open this quiz in your browser:',url}); }catch(e){}
+}
+/* ---- opening a link ---- */
+async function qzSharedInit(){
+  const m=/^#quiz=([zp]\.[A-Za-z0-9_-]+)$/.exec(location.hash||''); if(!m) return;
+  S.qz.shared={status:'loading'}; S.qz.run=null; S.tab='quiz'; render();
+  try{
+    const o=await qzDecode(m[1]), list=qzShareCards(o);
+    const tm=['count','watch','off'].includes(o.m)?o.m:'off', lim=Math.max(0,Math.min(36000,+o.l||0));
+    TMP.clear(); list.forEach(c=>TMP.set(c.id,c));
+    S.qz.shared={status:'ready',title:typeof o.n==='string'?o.n.slice(0,80):'',cards:list,tm:tm==='count'&&!lim?'off':tm,lim};
+  }catch(e){ S.qz.shared={status:'error',msg:e&&e.message==='browser'?'This browser is too old to open the link. Update it, or open the link in Chrome or Safari.':'The link looks cut off or damaged. Ask for it again, and copy the whole link.'}; }
+  render();
+}
+function qzSharedStart(paper){ const sh=S.qz.shared; if(!sh||sh.status!=='ready') return; qzNewRun(sh.cards.map(c=>c.id),{tm:sh.tm,lim:sh.lim,paper,shared:true}); }
+function qzSharedClose(){
+  S.qz.shared=null; S.qz.run=null; TMP.clear(); try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){}
+  loadQuiz(); if(!cards.some(c=>!c.fm)&&!docs.length) S.tab='library';
+}
+async function qzSharedSave(){   // add the shared questions to your own library, so they join your reviews
+  const sh=S.qz.shared; if(!sh||sh.status!=='ready'||sh.saved||sh.saving) return; sh.saving=true;
+  try{
+    const d={id:uid(),name:'Shared quiz · '+(sh.title||new Date().toLocaleDateString()),size:0,status:'done',error:'',count:0,added:Date.now(),blob:null,text:''};
+    docs.push(d); await DB.put('docs',d);
+    const list=sh.cards.map(c=>({type:c.type,front:c.front,choices:c.choices.map(x=>({...x})),answer:c.answer,back:c.back,answerText:c.answerText,solution:c.solution,n:c.n,hint:c.subject,setSubject:c.subject,setTopic:c.topic||undefined,setMode:c.mode}));
+    await saveCards(d,list); await DB.put('docs',d); buildQueue();
+    sh.saved=true;
+    toast(d.count+' card'+(d.count===1?'':'s')+' added to your library'+(d.skipped?' ('+d.skipped+' you already had)':''));
+  }catch(e){ toast('Could not add the cards. Try again.'); }
+  sh.saving=false; render();
+}
+function qzSharedView(){
+  const sh=S.qz.shared;
+  if(sh.status==='loading') return `<div class="panel"><h3 class="sec">Opening the shared quiz…</h3></div>`;
+  if(sh.status==='error') return `<div class="panel"><h3 class="sec">This link did not open</h3><p class="note" style="margin:0">${esc(sh.msg)}</p><div class="actions"><button class="btn" data-act="qshclose">Close</button></div></div>`;
+  const n=sh.cards.length, by={}; sh.cards.forEach(c=>{ by[c.subject]=(by[c.subject]||0)+1; });
+  const time=sh.tm==='count'?`${Math.round(sh.lim/60)} minutes, counting down`:sh.tm==='watch'?'timed with a stopwatch':'no time limit';
+  return `<div class="panel"><h3 class="sec">A quiz was shared with you</h3>${sh.title?`<div style="font-weight:700;margin-bottom:4px">${esc(sh.title)}</div>`:''}<p class="note" style="margin:0 0 6px">${n} question${n===1?'':'s'} · ${Object.entries(by).map(([k,v])=>esc(k)+' '+v).join(', ')} · ${time}</p><p class="note" style="margin:0">Answer at your own pace, skip a question and come back, and see the answers and solutions after you submit. Nothing is saved to your own cards unless you choose to add them at the end.</p><div class="actions"><button class="btn primary" data-act="qshstart">Start the quiz</button><button class="btn" data-act="qshpaper">Print it instead</button><button class="btn" data-act="qshclose">Close</button></div></div>`;
+}
+window.addEventListener('hashchange',()=>{ if(/^#quiz=/.test(location.hash)) qzSharedInit(); });
+document.addEventListener('focusin',e=>{ if(e.target&&e.target.id==='qz-link') e.target.select(); });
 function qzAnswerText(q,picked){   // the choices in their original order and letters, so "Both A and B" still means what it says
   if(q.type==='mcq'){
     const c=q.choices.find(x=>x.k===q.answer), p=picked&&q.choices.find(x=>x.k===picked);
@@ -3901,16 +4213,16 @@ function qzAnswerText(q,picked){   // the choices in their original order and le
   return q.type==='cloze'?q.answerText+'\n\n'+q.back:q.back;
 }
 function renderQuiz(){
-  const r=S.qz.run; if(!r) return qzSetupView();
-  if(!r.done&&!qzCur()){ r.done=true; qzSaveRun(); }
-  return r.done?qzResults():qzRunView();
+  const r=S.qz.run; if(!r) return S.qz.shared?qzSharedView():qzSetupView();
+  qzPrune(); if(!r.items.length&&r.phase!=='done'){ r.phase='done'; qzSaveRun(); }
+  return r.phase==='done'?qzResults():r.phase==='check'?qzCheckView():r.phase==='paper'?qzPaperView():r.phase==='sheet'?qzSheetView():qzRunView();
 }
 function qzSetupView(){
   if(!cards.some(c=>!c.fm)) return `<div class="panel empty"><b>${cards.length?'No multiple-choice questions yet':'No cards yet'}</b><br>The practice quiz is built from questions in a document or the class question bank. ${cards.length?'Your formula cards are in the Practice tab. ':''}Add a document or link the class bank in Documents, then come back.<div class="actions" style="justify-content:center"><button class="btn primary" data-act="tab" data-v="library">Open Documents</button>${cards.length?`<button class="btn" data-act="tab" data-v="practice">Practice formulas</button>`:''}</div></div>`;
   const rows=qzGrid(), q=S.qz, {tot,per}=qzCount(), subs=[...new Set(rows.map(r=>r.s))];
   if(q.subj!=='All'&&!subs.includes(q.subj)) q.subj='All';
   const vis=rows.filter(r=>q.subj==='All'||r.s===q.subj), nCards=s=>rows.filter(r=>s==='All'||r.s===s).reduce((a,r)=>a+r.Solving+r.Terms,0);
-  let h=`<div class="panel"><h3 class="sec">Practice quiz</h3><p class="note" style="margin:0">Choose how many cards you want from each topic, solving and terms counted separately, then start. Answers do not change when a card is due for review. A card you get wrong is marked as missed, so it shows up under Missed and Weak spots.</p></div>`;
+  let h=`<div class="panel"><h3 class="sec">Practice quiz</h3><p class="note" style="margin:0">Choose how many cards you want from each topic, solving and terms counted separately, then start. It works like an exam: nothing is revealed while you answer, you can skip a question and come back, and everything is graded when you submit. A card you get wrong is marked as missed, so it shows up under Missed and Weak spots. You can also print the questions as a paper test.</p></div>`;
   h+=`<div class="qsub" role="group" aria-label="Show subject">`+['All',...subs].map(s=>`<button class="typebtn" data-act="qsubj" data-v="${esc(s)}" aria-pressed="${q.subj===s}"><b>${esc(s)}</b><span>${nCards(s)} cards</span><span><i data-qsub="${esc(s)}">${s==='All'?tot:(per[s]||0)}</i> chosen</span></button>`).join('')+`</div>`;
   const lc={Any:0,Easy:0,Medium:0,Hard:0,none:0}; for(const c of cards) if(!c.fm&&qzMode(c)==='Solving'){ lc.Any++; const l=lvOf(c); if(l) lc[l.lv]++; else lc.none++; }
   h+=`<div class="qsub" role="group" aria-label="Level of the Solving cards">`+['Any',...LV].map(x=>`<button class="typebtn lvbtn ${x}" data-act="qlevel" data-v="${x}" aria-pressed="${q.level===x}"><b>${x}</b><span>${lc[x]} solving</span></button>`).join('')+`</div>`;
@@ -3918,6 +4230,7 @@ function qzSetupView(){
   h+=`<div class="panel controls"><label>Pick cards <select data-change="qpick" aria-label="How cards are picked"><option value="random" ${q.pick==='random'?'selected':''}>At random</option><option value="weak" ${q.pick==='weak'?'selected':''}>Missed and unseen first</option></select></label>`+
      `<label>Order <select data-change="qorder" aria-label="Order of the questions"><option value="mixed" ${q.order==='mixed'?'selected':''}>Mixed together</option><option value="topic" ${q.order==='topic'?'selected':''}>Topic by topic</option></select></label>`+
      `<label><input type="checkbox" data-change="shuffleC" ${S.shuffleC?'checked':''}> Shuffle choices</label>`+
+     `<label>Timer <select data-change="qtm" aria-label="Timer"><option value="count" ${q.tm==='count'?'selected':''}>Countdown</option><option value="watch" ${q.tm==='watch'?'selected':''}>Stopwatch</option><option value="off" ${q.tm==='off'?'selected':''}>No timer</option></select></label>`+(q.tm==='count'?`<label>Minutes <input type="number" id="qz-mins" class="qmins" min="1" max="600" step="1" inputmode="numeric" data-change="qmins" value="${q.mins||''}" placeholder="auto: ${Math.max(1,qzAutoSet())}" aria-label="Minutes allowed. Leave empty for ${QZ_MIN.Solving} minutes per solving card and ${QZ_MIN.Terms} per terms card"></label>`:'')+
      `<span class="qfill"><span class="note" style="margin:0">${q.subj==='All'?'Every row':'Every '+esc(q.subj)+' row'}:</span><button class="btn small" data-act="qfill" data-v="0">Clear</button><button class="btn small" data-act="qfill" data-v="5">5 each</button><button class="btn small" data-act="qfill" data-v="10">10 each</button></span></div>`;
   h+=`<div class="panel qgrid">`;
   let last=null, ix=0;
@@ -3929,55 +4242,108 @@ function qzSetupView(){
     if(r.s!==last){ h+=`<div class="qsh${last?' gap':''}"><span class="tag ${esc(r.s)}">${esc(r.s)}</span></div>`; last=r.s; }
     h+=`<div class="qrow"><div class="qname"><b>${esc(r.t)}</b></div>${cell(r,'Solving','qn-'+ix+'s')}${cell(r,'Terms','qn-'+ix+'t')}</div>`; ix++;
   }
-  h+=`</div><div class="qbar"><span id="qz-total">${tot} card${tot===1?'':'s'} chosen</span><button class="btn primary" id="qz-start" data-act="qstart" ${tot?'':'disabled'}>Start quiz</button></div>`;
+  h+=`</div><div class="qbar"><span id="qz-total">${tot} card${tot===1?'':'s'} chosen</span><span class="qbtns"><button class="btn" id="qz-paper" data-act="qpaper" ${tot?'':'disabled'} title="Print the questions as a paper test, or send them as a link">Print or share</button><button class="btn primary" id="qz-start" data-act="qstart" ${tot?'':'disabled'}>Start quiz</button></span></div>`;
   return h;
 }
+function qzNav(r){   // a strip of question numbers (answered, skipped, flagged), and an overview of all of them
+  const chip=(x,i)=>{ const a=qzAns(x,byId(x.id)), cur=i===r.i; return `<button class="qn${a?' done':''}${x.skip&&!a?' skip':''}${x.flag?' flag':''}${cur?' cur':''}" data-act="qgo" data-v="${i}" aria-label="Question ${i+1}${a?', answered':x.skip?', skipped':', not answered'}${x.flag?', flagged':''}"${cur?' aria-current="step"':''}>${i+1}</button>`; };
+  let h=`<div class="qnavrow">`+(r.nav?`<span class="note" style="margin:0;flex:1">All questions · filled = answered · dashed = skipped · ⚑ = flagged</span>`:`<div class="qnav" role="group" aria-label="Questions">${r.items.map(chip).join('')}</div>`)+`<button class="btn small" data-act="qnav" aria-expanded="${!!r.nav}">${r.nav?'Hide':'Overview'}</button></div>`;
+  if(r.nav) h+=`<div class="qnavgrid" role="group" aria-label="All questions">${r.items.map(chip).join('')}</div>`;
+  return h;
+}
+function qzConf(r,T){
+  const un=T.un.length, fl=r.items.map((x,i)=>x.flag?i+1:0).filter(Boolean);
+  return `<div class="qconf" role="group" aria-label="Submit the quiz"><b>${un?`${T.ans} of ${T.n} answered.`:`All ${T.n} answered.`}</b> ${un?`Not answered: ${T.un.slice(0,12).join(', ')}${un>12?' and '+(un-12)+' more':''}. `:''}${fl.length?`Flagged: ${fl.slice(0,12).join(', ')}. `:''}${un?'Blank questions do not score, and your card ratings are not changed for them.':'Answers cannot be changed after you submit.'}<div class="actions"><button class="btn" id="qz-keep" data-act="qkeep">Keep going</button>${un?`<button class="btn" data-act="qgo" data-v="${T.un[0]-1}">Go to question ${T.un[0]}</button>`:''}<button class="btn primary" data-act="qsubmit">Submit and grade</button></div></div>`;
+}
 function qzRunView(){
-  const r=S.qz.run, it=qzCur(), q=byId(it.id), n=r.items.length;
-  const right=r.items.filter(x=>x.res==='right').length, missed=r.items.filter(x=>x.res==='wrong'||x.res==='skip').length;
-  const auto=qzAuto(q), graded=!!it.res;
-  const swipeOk=S.swipe&&r.revealed&&!auto&&!graded;
+  const r=S.qz.run, it=qzCur(), q=byId(it.id), n=r.items.length, T=qzTally(r);
   const qen=S._qzShown!==it.id; S._qzShown=it.id;
-  let h=`<div class="panel qpanel s-${esc(q.subject||'')}${qen?' enter':''}"${swipeOk?' data-swipe="quiz"':''}><div class="qhead"><span><b>Question ${r.i+1} of ${n}</b> · ${right} right · ${missed} missed</span><button class="btn small" data-act="qend">Finish now</button></div><div class="seg" role="img" aria-label="${r.i} of ${n} done"><i class="l" style="width:${Math.round(100*r.i/n)}%"></i></div>`;
+  const clock=r.tm==='off'?'':`<span class="qclock${qzClockCls(r)}" id="qz-clock" role="timer" aria-label="${r.tm==='count'?'Time left':'Time used'}">${qzClockText(r)}</span>`;
+  let h=`<div class="panel qpanel s-${esc(q.subject||'')}${qen?' enter':''}"><div class="qhead"><span><b>Question ${r.i+1} of ${n}</b><span class="qans"> · ${T.ans} answered</span></span><span class="qhr">${clock}<button class="btn small" data-act="qfinish">Finish</button></span></div><div class="seg" role="img" aria-label="${T.ans} of ${n} answered"><i class="n" style="width:${Math.round(100*T.ans/n)}%"></i></div>`;
+  h+=qzNav(r);
+  if(r.conf) h+=qzConf(r,T);
   h+=`<div class="qhead" style="margin-top:12px"><span><span class="tag ${esc(q.subject)}">${esc(q.subject)}</span> ${esc(q.topic)}${q.mode?`<span class="modepill ${q.mode}">${q.mode}</span>`:''}${lvTag(q)}${repTag(q)}</span></div>${srcLine(q)}`;
-  h+=renderCardFace(q,null,r);
-  if(r.revealed) h+=relBlock(q);
-  if(!r.revealed){
-    h+=`<div class="dock"><div class="actions"><button class="btn ${q.type==='mcq'?'':'primary'}" data-act="qshow">${auto?'Show answer (counts as missed)':'Show answer'}</button></div>${keyHint('Keys: '+(q.type==='mcq'?K('A')+'–'+K('F')+' answer · ':'')+K('Space')+' show answer · '+K('S')+' star')}</div>`;
-  }else if(auto||graded){
-    const msg=it.res==='right'?'Correct.':it.res==='wrong'?'Not quite.':'Shown without answering, counted as missed.';
-    h+=`<div class="qres ${it.res||''}" role="status">${msg}</div><div class="dock"><div class="actions"><button class="btn primary" data-act="qnext">${r.i+1>=n?'See results':'Next question'}</button></div>${keyHint('Keys: '+K('Space')+' next · '+K('S')+' star')}</div>`;
-  }else{
-    h+=`<p class="note" style="margin:12px 0 6px">${q.type==='mcq'?'This card has no answer key. ':''}Did you get it?${TOUCH&&S.swipe?' Swipe the card right for "I got it", left for "I missed it".':''}</p><div class="dock"><div class="rate two"><button data-act="qgrade" data-v="0">I missed it<small>1</small></button><button data-act="qgrade" data-v="1">I got it<small>2</small></button></div>${keyHint('Keys: '+K('1')+' missed it · '+K('2')+' got it · '+K('S')+' star')}</div>`;
-  }
-  h+=`<div class="actions"><button class="btn small" data-act="star" data-v="${q.id}" aria-pressed="${!!q.star}">${q.star?'★ Starred':'☆ Star'}</button></div></div>`;
+  h+=renderCardFace(q,null,{revealed:false,picked:null,sel:it.picked});
+  if(q.type!=='mcq') h+=`<label class="qtxt"><span>Your answer or working <small>(optional, only you see it)</small></span><textarea id="qz-text" rows="3" data-change="qtext" data-qi="${r.i}" spellcheck="false" autocapitalize="off">${esc(it.text||'')}</textarea></label>`;
+  const last=r.i>=n-1, ans=qzAns(it,q);
+  h+=`<div class="dock"><div class="actions qnavbtn"><button class="btn" data-act="qprev" ${r.i?'':'disabled'}>‹ Prev</button>${ans?'':`<button class="btn" data-act="qskip" title="Set it aside; it comes back later">Skip for now</button>`}<button class="btn" data-act="qflag" aria-pressed="${!!it.flag}" aria-label="${it.flag?'Remove the flag':'Flag for review'}" title="Flag for review">⚑<span class="fl"> ${it.flag?'Flagged':'Flag'}</span></button><button class="btn primary" data-act="qnext">${last?'Review and submit':'Next ›'}</button></div>${keyHint('Keys: '+(q.type==='mcq'?K('A')+'–'+K('F')+' answer · ':'')+K('←')+' '+K('→')+' previous / next · '+K('X')+' skip · '+K('M')+' flag · '+K('S')+' star')}</div>`;
+  h+=`<div class="actions">${q.tmp?'':`<button class="btn small" data-act="star" data-v="${q.id}" aria-pressed="${!!q.star}">${q.star?'★ Starred':'☆ Star'}</button>`}</div></div>`;
+  return h;
+}
+function qzCheckView(){   // the cards that have no key: you compare and say how you did
+  const r=S.qz.run, it=qzPend(r); if(!it){ r.phase='done'; qzSaveRun(); return qzResults(); }
+  const q=byId(it.id), left=r.items.filter(x=>x.pend&&byId(x.id)).length, qen=S._qzShown!==it.id; S._qzShown=it.id;
+  const pk=it.picked&&q.type==='mcq'?choiceOrder(q).indexOf(it.picked):-1;
+  let h=`<div class="panel"><h3 class="sec">Mark your own answers</h3><p class="note" style="margin:0">These cards have no answer for the app to check. Compare yours with the answer below, then say how you did. ${left} left to mark.</p></div>`;
+  h+=`<div class="panel qpanel s-${esc(q.subject||'')}${qen?' enter':''}"${S.swipe?' data-swipe="quiz"':''}><div class="qhead"><span><span class="tag ${esc(q.subject)}">${esc(q.subject)}</span> ${esc(q.topic)}${q.mode?`<span class="modepill ${q.mode}">${q.mode}</span>`:''}</span></div>${srcLine(q)}`;
+  h+=renderCardFace(q,null,{revealed:true,picked:it.picked,sel:null});
+  if(pk>=0) h+=`<div class="note ytxt">You chose ${String.fromCharCode(65+pk)}.</div>`;
+  if((it.text||'').trim()) h+=`<div class="note ytxt"><b>What you wrote:</b> ${esc(it.text)}</div>`;
+  h+=relBlock(q);
+  h+=`<p class="note" style="margin:12px 0 6px">Did you get it?${TOUCH&&S.swipe?' Swipe the card right for "I got it", left for "I missed it".':''}</p><div class="dock"><div class="rate two"><button data-act="qgrade" data-v="0">I missed it<small>1</small></button><button data-act="qgrade" data-v="1">I got it<small>2</small></button></div>${keyHint('Keys: '+K('1')+' missed · '+K('2')+' got it · '+K('S')+' star')}</div>`;
+  h+=`<div class="actions">${q.tmp?'':`<button class="btn small" data-act="star" data-v="${q.id}" aria-pressed="${!!q.star}">${q.star?'★ Starred':'☆ Star'}</button>`}${left>1?`<button class="btn small" data-act="qskipgrade">Skip marking the other ${left-1}</button>`:''}</div></div>`;
+  return h;
+}
+function qzPaperView(){
+  const r=S.qz.run, n=r.items.length, mins=r.lim?Math.round(r.lim/60):0, L=r.link;
+  let h=`<div class="panel"><h3 class="sec">Send a link · ${n} question${n===1?'':'s'}</h3><p class="note" style="margin:0">Your classmates open the link in any browser. They need no app, account or sign-in, and they get these questions with the same timer. The answers and solutions show after they submit, and their results stay on their own device.</p>`+
+    `<label class="shl">Quiz name (optional)<input type="text" id="qz-shname" maxlength="80" data-change="shname" value="${esc(S.shareName||'')}" placeholder="Math Module 3, quiz 1" autocomplete="off"></label>`+
+    `<label class="shl chk"><input type="checkbox" data-change="shsol" ${S.shareSol!==false?'checked':''}> Include solutions (makes the link longer)</label>`+
+    (shareLocal()?`<label class="shl">Site address the link opens<input type="url" data-change="shbase" value="${esc(shareBase())}" autocomplete="off" spellcheck="false"></label>`:'')+
+    `<div class="actions"><button class="btn primary" data-act="qshare" ${r.busy?'disabled':''}>${L&&L.url?'Update the link':'Create the link'}</button></div>`;
+  if(L&&L.url){
+    const len=L.len, note=len<=1800?'Short enough to send in any chat app.':len<=3900?'Fits in WhatsApp, Messenger, Telegram and email. Discord and text messages may cut it off.':len<=15000?'This is a long link. It fits in WhatsApp, Messenger and email, but Telegram, Discord and text messages can cut it off. For a shorter one, choose fewer questions or untick "Include solutions".':'This is a very long link, and some apps will not send it. Choose fewer questions or untick "Include solutions".';
+    h+=`<div class="linkbox" id="qz-linkbox"><input id="qz-link" readonly value="${esc(L.url)}" aria-label="Quiz link"><div class="actions"><button class="btn primary" data-act="qcopy">Copy link</button>${navigator.share?'<button class="btn" data-act="qnative">Share…</button>':''}</div><p class="note" style="margin:8px 0 0">${L.n} question${L.n===1?'':'s'} · ${len.toLocaleString()} characters. ${note}</p></div>`;
+  }else if(L&&L.big) h+=`<p class="note" role="alert" style="color:var(--bad)">That is too long to send as a link (${L.len.toLocaleString()} characters). Choose fewer questions, or untick "Include solutions".</p>`;
+  else if(L&&L.fail) h+=`<p class="note" role="alert" style="color:var(--bad)">The link could not be made. Try again.</p>`;
+  h+=`<p class="note" style="margin:10px 0 0">Anyone who has the link can read the questions and answers, so send it only to the people you mean to.</p></div>`;
+  h+=`<div class="panel"><h3 class="sec">Print a paper copy</h3><p class="note" style="margin:0">Print the test, work through it on paper, then come back and type in your answers. The app grades it and updates your progress like any other quiz.</p>`;
+  h+=`<div class="actions"><button class="btn primary" data-act="qprint" data-v="test">Print the test</button><button class="btn" data-act="qprint" data-v="key">Print the answer key and solutions</button></div><p class="note">The test has the questions, working space under each Solving problem, and an answer sheet on the last page. Keep the key away until you are done. Without a printer, choose Save as PDF in the print window.</p>`;
+  if(r.tm!=='off') h+=`<div class="pclock"><span class="qclock${qzClockCls(r)}" id="qz-clock" role="timer" aria-label="Clock">${qzClockText(r)}</span><button class="btn small" data-act="qclock" data-v="${r.run?'0':'1'}">${r.run?'Stop the clock':r.el?'Resume the clock':'Start the clock'}</button><span class="note" style="margin:0">${r.tm==='count'?`Time allowed: ${mins} min`:'Counts up'}</span></div>`;
+  h+=`<div class="actions"><button class="btn primary" data-act="qsheet">I'm done: enter my answers</button><button class="btn" data-act="qscreen">Take it on screen instead</button></div></div>`;
+  h+=`<div class="actions"><button class="btn" data-act="qsetup">‹ Back</button></div>`;
+  return h;
+}
+function qzSheetView(){
+  const r=S.qz.run, T=qzTally(r);
+  let h=`<div class="panel"><h3 class="sec">Enter your answers</h3><p class="note" style="margin:0">Tap the letter you chose for each question; tap it again to clear it. Leave a question empty if you did not answer it. Questions with no choices are marked by you in the next step. <b>${T.ans} of ${T.n}</b> answered.</p><div class="sheetgrid">`;
+  h+=r.items.map((it,i)=>{ const q=byId(it.id); if(!q) return '';
+    return q.type==='mcq'
+      ?`<div class="shrow"><b>${i+1}</b><span class="shb">${q.choices.map(c=>`<button class="bub${it.picked===c.k?' on':''}" data-act="qbub" data-i="${i}" data-v="${esc(c.k)}" aria-pressed="${it.picked===c.k}" aria-label="Question ${i+1}, ${esc(c.k)}">${esc(c.k)}</button>`).join('')}</span></div>`
+      :`<div class="shrow"><b>${i+1}</b><span class="shb"><button class="btn small" data-act="qatt" data-i="${i}" aria-pressed="${!!it.ok}">${it.ok?'Attempted ✓':'Not attempted'}</button><span class="note" style="margin:0">written answer</span></span></div>`; }).join('');
+  h+=`</div><div class="actions"><button class="btn" data-act="qpaperback">‹ Back</button><button class="btn primary" data-act="qsubmit">Submit and grade</button></div></div>`;
   return h;
 }
 function qzResults(){
-  const r=S.qz.run, its=r.items.map(x=>({...x,q:byId(x.id)})).filter(x=>x.q), ans=its.filter(x=>x.res);
-  const right=ans.filter(x=>x.res==='right').length, bad=ans.filter(x=>x.res!=='right'), skipped=ans.filter(x=>x.res==='skip').length, left=its.length-ans.length;
-  const pct=ans.length?Math.round(100*right/ans.length):0;
-  let h=`<div class="panel"><h3 class="sec">Quiz results</h3><div class="qscore"><b>${right}</b> of ${ans.length} right<span>${pct}%</span></div><div class="seg" role="img" aria-label="${pct}% right"><i class="l" style="width:${pct}%"></i></div>`+
-    `<p class="note" style="margin:8px 0 0">${ans.length?'':'No cards were answered. '}${skipped?skipped+' shown without answering and counted as missed. ':''}${left?'You stopped with '+left+' card'+(left===1?'':'s')+' left. ':''}${bad.length?'Missed cards are marked, so they appear under Missed in Practice and in Weak spots on Progress.':ans.length?'Nothing missed.':''}</p></div>`;
+  const r=S.qz.run, its=r.items.map(x=>({...x,q:byId(x.id)})).filter(x=>x.q), N=its.length;
+  const right=its.filter(x=>x.res==='right').length, bad=its.filter(x=>x.res&&x.res!=='right'), none=its.filter(x=>!x.res&&!qzAns(x,x.q)), ungr=its.filter(x=>!x.res&&qzAns(x,x.q));
+  const pct=N?Math.round(100*right/N):0, used=r.el||0;
+  let tline=''; if(r.tm==='count'&&r.lim) tline=used<=r.lim?`Time ${qzFmt(used)} of ${qzFmt(r.lim)}.`:`Time ${qzFmt(used)}, over by ${qzFmt(used-r.lim)}.`; else if(r.tm==='watch'&&used>0) tline=`Time ${qzFmt(used)}.`;
+  if(tline&&N) tline+=` About ${qzFmt(used/N)} per question.`;
+  let h=`<div class="panel"><h3 class="sec">Quiz results</h3><div class="qscore"><b>${right}</b> of ${N} right<span>${pct}%</span></div><div class="seg" role="img" aria-label="${pct}% right"><i class="l" style="width:${pct}%"></i></div>`+
+    `<p class="note" style="margin:8px 0 0">${tline?tline+' ':''}${none.length?none.length+' not answered, so they did not score. ':''}${ungr.length?ungr.length+' answered but not marked. ':''}${bad.length?(r.shared?'This quiz came from a link, so these results are not added to your Progress.':'Missed cards are marked, so they appear under Missed in Practice and in Weak spots on Progress.'):N&&!none.length&&!ungr.length?'Nothing missed.':''}</p></div>`;
   const order=new Map(qzGrid().map((g,i)=>[g.s+'\t'+g.t,i])), by=new Map();
-  for(const x of ans){ const k=x.q.subject+'\t'+x.q.topic, e=by.get(k)||{s:x.q.subject,t:x.q.topic,Solving:[0,0],Terms:[0,0]}, m=qzMode(x.q); e[m][1]++; if(x.res==='right') e[m][0]++; by.set(k,e); }
+  for(const x of its){ const k=x.q.subject+'\t'+x.q.topic, e=by.get(k)||{s:x.q.subject,t:x.q.topic,Solving:[0,0,0],Terms:[0,0,0]}, m=qzMode(x.q); e[m][1]++; if(x.res==='right') e[m][0]++; e[m][2]+=x.t||0; by.set(k,e); }
   const groups=[...by.entries()].sort((a,b)=>(order.get(a[0])??1e9)-(order.get(b[0])??1e9)).map(e=>e[1]);
   if(groups.length){
     h+=`<div class="panel"><h3 class="sec">By topic</h3>`+groups.map((e,i)=>{
-      const rt=e.Solving[0]+e.Terms[0], tt=e.Solving[1]+e.Terms[1], p=Math.round(100*rt/tt);
-      const parts=QZ_MODES.filter(m=>e[m][1]).map(m=>`${m} ${e[m][0]} of ${e[m][1]}`).join(' · ');
+      const rt=e.Solving[0]+e.Terms[0], tt=e.Solving[1]+e.Terms[1], p=Math.round(100*rt/tt), ts=e.Solving[2]+e.Terms[2];
+      const parts=QZ_MODES.filter(m=>e[m][1]).map(m=>`${m} ${e[m][0]} of ${e[m][1]}${e[m][2]>=1?' (about '+qzFmt(e[m][2]/e[m][1])+' each)':''}`).join(' · ');
       return `<div class="line${i?'':' first'}" style="display:block"><div style="display:flex;justify-content:space-between;gap:8px"><span><span class="tag ${esc(e.s)}">${esc(e.s)}</span> ${esc(e.t)}</span><span class="m">${p}%</span></div><div class="seg" style="margin:6px 0 3px" role="img" aria-label="${p}% right"><i class="l" style="width:${p}%"></i></div><div class="m">${parts}</div></div>`;
     }).join('')+`</div>`;
   }
-  if(bad.length){
-    h+=`<div class="panel"><h3 class="sec">Missed (${bad.length})</h3><div class="tree">`+bad.map(x=>{
-      const open=!!S.qz.open[x.id];
-      return `<button class="row" data-act="qtog" data-v="${x.id}" aria-expanded="${open}"><span>${cutx(x.q.front,110)}</span><span><span class="modepill ${qzMode(x.q)}">${qzMode(x.q)}</span></span></button>`+
-        (open?`<div class="detail"><div class="stem" style="font-size:1.05rem">${fx(x.q.front)}</div><div class="solution">${fx(qzAnswerText(x.q,x.picked))}</div></div>`:'');
-    }).join('')+`</div></div>`;
-  }
-  const {tot}=qzCount();
-  h+=`<div class="actions"><button class="btn primary" data-act="qretry" ${bad.length?'':'disabled'}>Retry the ${bad.length} missed</button><button class="btn" data-act="qagain" ${tot?'':'disabled'}>Same setup, new cards</button><button class="btn" data-act="qsetup">Change setup</button></div>`;
+  const rows=list=>`<div class="tree">`+list.map(x=>{
+    const open=!!S.qz.open[x.id];
+    return `<button class="row" data-act="qtog" data-v="${x.id}" aria-expanded="${open}"><span>${cutx(x.q.front,110)}</span><span><span class="modepill ${qzMode(x.q)}">${qzMode(x.q)}</span></span></button>`+
+      (open?`<div class="detail"><div class="stem" style="font-size:1.05rem">${fx(x.q.front)}</div><div class="solution">${fx(qzAnswerText(x.q,x.picked))}</div>${(x.text||'').trim()?`<div class="note"><b>What you wrote:</b> ${esc(x.text)}</div>`:''}</div>`:'');
+  }).join('')+`</div>`;
+  if(bad.length) h+=`<div class="panel"><h3 class="sec">Missed (${bad.length})</h3>${rows(bad)}</div>`;
+  if(none.length) h+=`<div class="panel"><h3 class="sec">Not answered (${none.length})</h3>${rows(none)}</div>`;
+  const {tot}=qzCount(), again=its.filter(x=>x.res!=='right').length;
+  if(r.shared){
+    const sh=S.qz.shared;
+    h+=`<div class="actions"><button class="btn primary" data-act="qretry" ${again?'':'disabled'}>Retry the ${again} missed or unanswered</button><button class="btn" data-act="qshstart">Take it again</button>${sh&&sh.status==='ready'&&!sh.saved?`<button class="btn" data-act="qshsave">Add these ${sh.cards.length} cards to my library</button>`:''}<button class="btn" data-act="qprint" data-v="key">Print answers and solutions</button><button class="btn" data-act="qshclose">Close</button></div>${sh&&sh.saved?'<p class="note">Added to your library, under Documents.</p>':'<p class="note">This quiz was shared with you. Your results stay on this device and nothing was added to your cards.</p>'}`;
+  }else h+=`<div class="actions"><button class="btn primary" data-act="qretry" ${again?'':'disabled'}>Retry the ${again} missed or unanswered</button><button class="btn" data-act="qagain" ${tot?'':'disabled'}>Same setup, new cards</button><button class="btn" data-act="qsetup">Change setup</button><button class="btn" data-act="qprint" data-v="key">Print answers and solutions</button></div>`;
   return h;
 }
 /* ================= laptop keyboard shortcuts: G then a letter = go to a tab, / = search, arrows = study items, ? = help ================= */
@@ -3995,7 +4361,7 @@ function kbSheet(open){
     g('Study and Browse',[row(K('/'),'Jump to the search box'),row(K('←')+' '+K('→'),'Previous / next item in the Study reader'),row(K('Esc'),'Back to the list, or leave the search box')])+
     `</div><div>`+
     g('Practice',[row(K('A')+'–'+K('D'),'Pick an answer'),row(K('Space'),'Show the answer, then take the highlighted rating'),row(K('1')+' '+K('2')+' '+K('3')+' '+K('4'),'Again · Hard · Good · Easy'),row(K('S'),'Star the card'),row(K('Z'),'Back to the previous card')])+
-    g('Practice quiz',[row(K('A')+'–'+K('F'),'Pick a choice'),row(K('Space'),'Show the answer, then next question'),row(K('1')+' '+K('2'),'I missed it · I got it'),row(K('S'),'Star the card')])+
+    g('Practice quiz',[row(K('A')+'–'+K('F'),'Pick a choice (again to clear it)'),row(K('←')+' '+K('→'),'Previous / next question'),row(K('Space'),'Next question'),row(K('X'),'Skip for now'),row(K('M'),'Flag for review'),row(K('1')+' '+K('2'),'Marking your own: missed · got it'),row(K('S'),'Star the card')])+
     g('Anywhere',[row(K('?'),'Open or close this sheet')])+
     `</div></div><button class="btn kbs-x" type="button" data-kbclose>Close</button></div>`;
   el.addEventListener('click',e=>{ if(e.target===el||e.target.closest('[data-kbclose]')) kbSheet(false); });
@@ -4040,21 +4406,26 @@ document.addEventListener('keydown',e=>{
     if(k==='Escape'){ const b=document.querySelector('#main [data-act="st_back"]'); if(b){ e.preventDefault(); b.click(); } return; }
   }
 }, true);
-document.addEventListener('keydown',e=>{   // quiz shortcuts: A-F answer, Space show / next, 1 and 2 mark yourself, S star
+document.addEventListener('keydown',e=>{   // quiz shortcuts: A-F answer, arrows or Space move, X skip, M flag, S star; 1 and 2 mark yourself
   if(e.ctrlKey||e.metaKey||e.altKey||S.tab!=='quiz') return;
-  const r=S.qz.run; if(!r||r.done) return;
+  const r=S.qz.run; if(!r||(r.phase!=='take'&&r.phase!=='check')) return;
   const t=e.target, tag=(t&&t.tagName)||''; if(/^(INPUT|TEXTAREA|SELECT)$/.test(tag)||(t&&t.isContentEditable)) return;
   const k=e.key, space=(k===' '||k==='Enter'); if(space&&tag==='BUTTON'&&t.closest('#main')) return;
+  if(r.phase==='check'){
+    const p=qzPend(r); if(!p) return;
+    if(k==='s'||k==='S'){ e.preventDefault(); toggleStar(p.id); return; }
+    if(k==='1'||k==='2'){ e.preventDefault(); qzGrade(k==='2'); }
+    return;
+  }
+  if(r.conf) return;
   const it=qzCur(); if(!it) return; const q=byId(it.id);
   if(space&&tag==='BUTTON') t.blur();
   if(k==='s'||k==='S'){ e.preventDefault(); toggleStar(q.id); return; }
-  if(!r.revealed){
-    if(q.type==='mcq'&&/^[a-fA-F]$/.test(k)){ const o=choiceOrder(q)[k.toUpperCase().charCodeAt(0)-65]; if(o){ e.preventDefault(); qzPick(o); } return; }
-    if(space){ e.preventDefault(); qzShow(); }
-    return;
-  }
-  if(it.res){ if(space||k==='ArrowRight'){ e.preventDefault(); qzNext(); } return; }
-  if(k==='1'||k==='2'){ e.preventDefault(); qzGrade(k==='2'); }
+  if(q.type==='mcq'&&/^[a-fA-F]$/.test(k)){ const o=choiceOrder(q)[k.toUpperCase().charCodeAt(0)-65]; if(o){ e.preventDefault(); qzPickAns(o); } return; }
+  if(k==='ArrowRight'||space){ e.preventDefault(); qzMove(1); return; }
+  if(k==='ArrowLeft'){ e.preventDefault(); qzMove(-1); return; }
+  if(k==='x'||k==='X'){ e.preventDefault(); qzSkip(); return; }
+  if(k==='m'||k==='M'){ e.preventDefault(); qzFlag(); }
 });
 function render(){
   repEnsure(); renderNet(); renderGs(); saveView(); fmCheck();
@@ -4067,6 +4438,7 @@ function render(){
   const tl1=document.querySelector('.tlist'); if(tl1){ tl1.scrollTop=tsc; applyTopicFilter(); }
   if(S.refocus){ const el=document.getElementById(S.refocus); S.refocus=null; if(el) el.focus({preventScroll:true}); }
   if(S.edit) edPreview();
+  const qc=document.querySelector('.qnav .qn.cur'); if(qc){ const nv=qc.parentNode; nv.scrollLeft=Math.max(0,qc.offsetLeft-nv.clientWidth/2+qc.offsetWidth/2); }
 }
 
 /* ================= events ================= */
@@ -4075,7 +4447,7 @@ document.addEventListener('click',async e=>{
   const a=b.dataset.act, v=b.dataset.v;
   if(a==='tab'){ S.tab=v; S.topicOpen=false; S.st.form=null; S.st.scroll=true; if(v==='practice'){ if(!S.queue.length||GS.rebuild) buildQueue(); GS.rebuild=false; } }
   else if(a==='subject'){ S.subject=v; S.topics=v==='All'?S.topics:S.topics.filter(t=>topicsFor(v).includes(t)); S.lesson='All'; if(S.doc!=='All'&&!cards.some(c=>(c.docId||'')===S.doc&&(v==='All'||c.subject===v))) S.doc='All'; buildQueue(); }
-  else if(a==='pick'){ return S.tab==='quiz'?qzPick(v):pick(v); }
+  else if(a==='pick'){ return S.tab==='quiz'?qzPickAns(v):pick(v); }
   else if(a.slice(0,3)==='st_'){ if(await studyAct(a,b,v)==='x') return; }
   else if(a==='bsave'){ const el=document.getElementById('bank-url'); const r=bankUrl(el?el.value:''); if(r.error){ S.bank.err=r.error; S.bank.hint='Paste the link from File, Share, Publish to web (choose CSV), or the sheet\'s own link.'; }
     else{ S.bank.url=r.url; S.bank.editing=false; S.bank.err=''; S.bank.hint=''; S.bank.plan=null; try{ localStorage.setItem('br-bank',JSON.stringify({url:r.url,t:(S.bank.last||{}).t||0,n:(S.bank.last||{}).n||0})); }catch(e){} toast('Link saved. Press Check for updates.'); } }
@@ -4150,14 +4522,36 @@ document.addEventListener('click',async e=>{
   else if(a==='qlevel'&&(v==='Any'||LV.includes(v))){ S.qz.level=v; qzSave(); }
   else if(a==='qfill'){ const n=+v||0; for(const r of qzGrid()){ if(S.qz.subj!=='All'&&r.s!==S.qz.subj) continue; for(const m of QZ_MODES) qzPut(qzKey(r.s,r.t,m),Math.min(n,r[m])); } qzSave(); }
   else if(a==='qstart'){ qzGrid(); qzStart(); }
-  else if(a==='qshow'){ return qzShow(); }
-  else if(a==='qnext'){ qzNext(); return; }
+  else if(a==='qpaper'){ qzGrid(); qzStart(null,{paper:true}); }
+  else if(a==='qgo'){ const r=S.qz.run; if(r) r.nav=false; return qzGo(+v); }
+  else if(a==='qprev'){ return qzMove(-1); }
+  else if(a==='qnext'){ return qzMove(1); }
+  else if(a==='qskip'){ return qzSkip(); }
+  else if(a==='qflag'){ return qzFlag(); }
+  else if(a==='qnav'){ const r=S.qz.run; if(r) r.nav=!r.nav; }
+  else if(a==='qfinish'){ return qzFinish(); }
+  else if(a==='qkeep'){ const r=S.qz.run; if(r) r.conf=false; }
+  else if(a==='qsubmit'){ return qzSubmit(); }
   else if(a==='qgrade'){ return qzGrade(v==='1'); }
-  else if(a==='qend'){ qzEnd(); }
+  else if(a==='qskipgrade'){ qzSkipGrading(); }
+  else if(a==='qclock'){ qzClockGo(v==='1'); }
+  else if(a==='qsheet'){ qzToSheet(); }
+  else if(a==='qscreen'){ qzToScreen(); }
+  else if(a==='qpaperback'){ const r=S.qz.run; if(r&&r.phase==='sheet'){ r.phase='paper'; qzSaveRun(); } }
+  else if(a==='qbub'){ qzBubble(+b.dataset.i,v); }
+  else if(a==='qatt'){ qzAttempt(+b.dataset.i); }
+  else if(a==='qprint'){ qzPrint(v); return; }
   else if(a==='qtog'){ S.qz.open[v]=!S.qz.open[v]; }
-  else if(a==='qretry'){ const ids=S.qz.run?S.qz.run.items.filter(x=>x.res&&x.res!=='right'&&byId(x.id)).map(x=>x.id):[]; qzStart(ids); }
+  else if(a==='qretry'){ const r0=S.qz.run, ids=r0?r0.items.filter(x=>x.res!=='right'&&byId(x.id)).map(x=>x.id):[]; qzStart(ids,{tm:r0&&r0.tm,shared:r0&&r0.shared}); }
+  else if(a==='qshare'){ qzShareMake(); return; }
+  else if(a==='qcopy'){ qzCopyLink(); return; }
+  else if(a==='qnative'){ qzNativeShare(); return; }
+  else if(a==='qshstart'){ qzSharedStart(false); }
+  else if(a==='qshpaper'){ qzSharedStart(true); }
+  else if(a==='qshclose'){ qzSharedClose(); }
+  else if(a==='qshsave'){ qzSharedSave(); return; }
   else if(a==='qagain'){ qzGrid(); qzStart(); }
-  else if(a==='qsetup'){ S.qz.run=null; S.qz.open={}; qzSaveRun(); }
+  else if(a==='qsetup'){ S.qz.run=null; S.qz.open={}; qzSaveRun(); const pr=document.getElementById('printroot'); if(pr) pr.innerHTML=''; }
   else if(a==='kick_file'){ const f=document.getElementById('file'); if(f) f.click(); }
   else if(a==='kick_bank'){ const e=document.getElementById('bank'); if(e){ if(e.scrollIntoView) e.scrollIntoView({behavior:swReduced()?'auto':'smooth',block:'center'}); const i=document.getElementById('bank-url'); if(i) try{ i.focus({preventScroll:true}); }catch(x){} } }
   else if(a==='guide_jump'){ const e=document.getElementById('tguide'); if(e&&e.scrollIntoView) e.scrollIntoView({behavior:swReduced()?'auto':'smooth',block:'start'}); }
@@ -4222,7 +4616,7 @@ function swReset(spring){
   if(!el) return;
   if(spring&&!swReduced()){ el.style.transition='transform .18s ease-out'; el.style.transform=''; setTimeout(()=>swClear(el),200); } else swClear(el);
 }
-function swHead(kind){ if(kind==='quiz'){ const r=S.qz.run, it=r&&!r.done&&qzCur(); return it&&r.revealed&&!it.res?it.id:null; } return S.revealed?S.queue[0]:null; }
+function swHead(kind){ if(kind==='quiz'){ const r=S.qz.run, it=r&&r.phase==='check'&&qzPend(r); return it?it.id:null; } return S.revealed?S.queue[0]:null; }
 function swCommit(el,kind,dx){
   const id=swHead(kind), ok=dx>0;
   SW.el=null; SW.id=null; SW.mode=''; SW.busy=true;
@@ -4263,6 +4657,7 @@ document.addEventListener('pointercancel',e=>{ if(SW.el&&e.pointerId===SW.id) sw
 let qTimer;
 document.addEventListener('input',e=>{   // live search in Browse; the box keeps focus while the list redraws
   const t=e.target; if(t&&t.dataset&&t.dataset.change==='qn'){ qzFromInput(t,true); return; }
+  if(t&&t.dataset&&t.dataset.change==='qtext'){ const r=S.qz.run, i=+t.dataset.qi; if(r&&r.items[i]) r.items[i].text=t.value; return; }
   if(t&&/^ed-/.test(t.id)){ edPreview(); return; }
   if(t&&t.id==='tp-search'){ S.tq=t.value; applyTopicFilter(); return; }
   if(t&&/^stf-/.test(t.id)){ stfPreview(); return; }
@@ -4277,6 +4672,12 @@ document.addEventListener('change',async e=>{
   if(t.id==='bank-file'){ const f=t.files&&t.files[0]; t.value=''; if(f){ try{ await bankCheckText(await f.text(),f.name); }catch(e){ bankFail(e); } } return; }
   const c=t.dataset.change; if(!c) return;
   if(c==='qn'){ qzFromInput(t,false); return; }   // numbers are kept in place; a redraw would drop the box you tab into
+  else if(c==='qtext'){ const r=S.qz.run, i=+t.dataset.qi; if(r&&r.items[i]){ r.items[i].text=t.value; qzSaveRun(); } return; }   // typing is kept in place; a redraw would take the box away
+  else if(c==='shname'){ S.shareName=t.value.slice(0,80); const r=S.qz.run; if(r&&r.link&&r.link.url){ r.link=null; const bx=document.getElementById('qz-linkbox'); if(bx) bx.remove(); } return; }   // no redraw: it would take the Create button away mid-tap
+  else if(c==='shbase'){ const u=t.value.trim(); try{ if(/^https?:\/\//i.test(u)) localStorage.setItem('br-site',u.split('#')[0]); else localStorage.removeItem('br-site'); }catch(e){} const r=S.qz.run; if(r) r.link=null; return; }
+  else if(c==='shsol'){ S.shareSol=t.checked; const r=S.qz.run; if(r) r.link=null; }
+  else if(c==='qtm'){ if(['count','watch','off'].includes(t.value)){ S.qz.tm=t.value; qzSave(); } }
+  else if(c==='qmins'){ const n=Math.max(0,Math.min(600,parseInt(t.value,10)||0)); S.qz.mins=n; t.value=n||''; qzSave(); return; }
   else if(c==='qpick'){ S.qz.pick=t.value; qzSave(); }
   else if(c==='qorder'){ S.qz.order=t.value; qzSave(); }
   else if(c==='topicchk'){ const n=t.dataset.t; S.topics=t.checked?[...new Set([...S.topics,n])]:S.topics.filter(x=>x!==n); S.lesson='All'; S.refocus=t.id; buildQueue(); }
@@ -4341,7 +4742,7 @@ if(navigator.connection&&navigator.connection.addEventListener) navigator.connec
   buildQueue();
   if(!kickGet()) kickSet(!cards.some(c=>!c.fm)&&!docs.length&&!Object.keys(LOG).length?'on':'off');
   if(!cards.some(c=>!c.fm)&&!docs.length) S.tab='library';
-  render(); runQueue(); gsBoot();
+  render(); runQueue(); gsBoot(); qzSharedInit();   // a link to a quiz opens it
   if(sorted&&(sorted['EE Laws']||sorted.OSH)){ buildQueue(); render(); toast(`Sorted ${sorted['EE Laws']+sorted.OSH} cards that were under PEC or had no topic: ${sorted['EE Laws']} into EE Laws, ${sorted.OSH} into OSH`); }
   try{ if(window.claude&&claude.use){ SAMPLE=await claude.use('sample'); render(); } }catch(e){ SAMPLE=null; }
 })();
